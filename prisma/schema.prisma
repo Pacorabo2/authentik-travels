@@ -1,0 +1,179 @@
+// prisma/schema.prisma
+
+// 1. LE GÉNÉRATEUR (C'est lui qui fabrique le code et a besoin du "output")
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/client"
+}
+
+// 2. LA BASE DE DONNÉES (Elle ne garde que le provider "postgresql")
+datasource db {
+  provider = "postgresql"
+}
+
+// ------------------------------------------------------
+// 1. UTILISATEURS & PROFESSEURS PARTENAIRES
+// ------------------------------------------------------
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  password      String?
+  image         String?
+  role          String    @default("USER")
+  
+  // Relations pour NextAuth
+  accounts      Account[]
+  sessions      Session[]
+  
+  // LA LIGNE MANQUANTE : Relation avec tes réservations
+  bookings      Booking[] 
+
+  createdAt     DateTime  @default(now())
+  updatedAt       DateTime    @default(now()) @updatedAt
+}
+
+enum Role {
+  USER
+  PARTNER
+  ADMIN
+}
+
+// ------------------------------------------------------
+// 2. VOYAGES DE GROUPE (Catalogue)
+// ------------------------------------------------------
+model GroupTrip {
+  id              Int         @id @default(autoincrement()) // ID Numérique
+  title           String
+  slug            String      @unique 
+  country         String?
+  
+  // VISUELS
+  flyerUrl        String?     
+  heroVideoUrl    String?     
+  description     String      @db.Text
+  program         Json        
+  
+  // DATES & STOCK
+  startDate       DateTime
+  endDate         DateTime
+  capacity        Int         
+  
+  // LES 3 FORMULES DE PRIX
+  priceBase       Float       // Chambre partagée (2-5 pers)
+  pricePremium    Float       // Chambre partagée (2 pers)
+  pricePlatinum   Float       // Chambre seule
+  
+  depositAmount   Float       @default(500) // Acompte fixe pour réservation
+  
+  status          TripStatus  @default(DRAFT)
+  bookings        Booking[] 
+  
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+// Définition des statuts possibles pour un voyage
+enum TripStatus {
+  DRAFT       // En préparation
+  PUBLISHED   // En ligne
+  FULL        // Complet
+  COMPLETED   // Terminé
+  CANCELLED   // Annulé
+}
+
+// ------------------------------------------------------
+// 3. RÉSERVATIONS & PAIEMENTS (Stripe)
+// ------------------------------------------------------
+model Booking {
+  // 1. On change aussi l'ID du Booking en Int pour la cohérence
+  id           Int        @id @default(autoincrement())
+  
+  // 2. IMPORTANT : tripId doit être un Int car GroupTrip.id est un Int
+  tripId       Int
+  
+  // 3. On met à jour la relation vers le nouveau modèle GroupTrip
+  groupTrip    GroupTrip  @relation(fields: [tripId], references: [id], onDelete: Cascade)
+
+  // 4. Les autres champs restent identiques
+  userName     String
+  userEmail    String
+  participants Int        @default(1)
+  status       String     @default("PENDING")
+  createdAt    DateTime   @default(now())
+  
+  // Relation optionnelle vers User (si tu gardes l'ID User en String/CUID)
+  userId       String?
+  user         User?      @relation(fields: [userId], references: [id])
+}
+
+enum BookingStatus {
+  PENDING   
+  CONFIRMED 
+  CANCELED  
+}
+
+// ------------------------------------------------------
+// 4. LEADS: VOYAGES SUR MESURE (Générateur de conversion)
+// ------------------------------------------------------
+model CustomLead {
+  id              String      @id @default(cuid())
+  firstName       String
+  lastName        String
+  email           String
+  phone           String?     // Nouveau
+  destination     String
+  budget          String
+  startDate       DateTime?
+  endDate         DateTime?   // Nouveau
+  dayNumber       Int?        // Nouveau
+  nightNumber     Int?        // Nouveau
+  partySize       Int
+  experienceType  String
+  additionalNotes String?     @db.Text
+  status          LeadStatus  @default(NEW)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+enum LeadStatus {
+  NEW          
+  CONTACTED    
+  PROPOSAL     
+  CONVERTED    
+  LOST         
+}
+
+// ------------------------------------------------------
+// 5. ACCOUMPT: COMPTES (Gestion des comptes)
+// ------------------------------------------------------
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.Text
+  access_token       String?  @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.Text
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+// ------------------------------------------------------
+// 6. SESSIONS: SESSIONS (Gestion des sessions)
+// ------------------------------------------------------
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
