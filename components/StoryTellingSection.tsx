@@ -85,7 +85,7 @@ export default function StorytellingSection() {
           {/* Lien vers la page 'À propos' */}
           <Link
             href="/a-propos"
-            className="inline-flex items-center gap-2 text-amber-600 font-bold hover:text-amber-700 transition-colors"
+            className="inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white font-black uppercase text-xs tracking-widest rounded-full hover:bg-amber-600 transition-all shadow-lg hover:shadow-amber-200"
           >
             Découvrir notre agence
             <span aria-hidden="true">→</span>
