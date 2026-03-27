@@ -104,3 +104,68 @@ Cette clé est à insérer dans la variable d'environnement :
 STRIPE_WEBHOOK_SECRET=whsec_4650b59f46b5f3da8afc83afd578a5635fa97f5e50178321a174ed75e604f631
 
 Redémarrer le terminal de l'application pour qu'il prenne en compte la nouvelle variable d'environnement puis procéder au paiement sur l'application.
+
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+                Check List passage du mode test au mode production
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+
+🛡️ ÉTAPE 1 : Configuration Légale (Stripe Dashboard)
+Avant d'encaisser le premier euro, Stripe doit valider ton identité.
+
+[ ] Activation du compte : Remplir le formulaire "Activate your account" (Structure juridique, SIRET, adresse).
+
+[ ] Vérification d'identité (KYC) : Téléverser la pièce d'identité du gérant et un justificatif de domicile.
+
+[ ] Lien Bancaire : Ajouter l'IBAN du compte professionnel pour les virements (Payouts).
+
+[ ] Libellé de relevé bancaire : Configurer le nom qui apparaîtra sur le relevé de tes clients (ex: AUTHENTIK-TRAVELS).
+
+🔑 ÉTAPE 2 : Permutation des Clés API (Vercel)
+Tu dois remplacer les clés de test par les clés réelles dans les paramètres de Vercel.
+
+[ ] Désactiver le "Test Mode" sur Stripe pour voir les clés "Live".
+
+[ ] Clé Publique : Remplacer pk_test_... par pk_live_...
+
+[ ] Clé Secrète : Remplacer sk_test_... par sk_live_...
+
+[ ] Secret JWT : Conserver ton NEXTAUTH_SECRET actuel (il reste valide).
+
+🌐 ÉTAPE 3 : Le Webhook de Production
+C'est l'étape où beaucoup d'erreurs surviennent. Le webhook de test ne fonctionne pas pour les paiements réels.
+
+[ ] Créer l'Endpoint Live : Dans Stripe (Mode Live) > Developers > Webhooks.
+
+[ ] URL de destination : https://ton-domaine.com/api/webhooks/stripe.
+
+[ ] Événements : Sélectionner uniquement checkout.session.completed.
+
+[ ] Signing Secret : Récupérer le nouveau whsec_... (Live) et mettre à jour la variable STRIPE_WEBHOOK_SECRET sur Vercel.
+
+🧪 ÉTAPE 4 : Test de "Fumée" (Smoke Test)
+Une fois tout configuré en Live, il faut vérifier que la chaîne fonctionne avec de l'argent réel.
+
+[ ] Test réel : Crée un voyage temporaire à 1€ (ou utilise un code promo de 99%).
+
+[ ] Paiement : Effectue l'achat avec ta propre carte bancaire.
+
+[ ] Vérification :
+
+[ ] L'argent apparaît-il dans "Paiements" sur Stripe ?
+
+[ ] La réservation est-elle bien créée dans ton admin (Supabase) ?
+
+[ ] L'email de confirmation (Resend) est-il bien reçu ?
+
+📦 ÉTAPE 5 : Optimisation & Sécurité
+[ ] Domaine Personnalisé : Connecter ton nom de domaine (ex: www.authentika.io) sur Vercel à la place de l'URL .vercel.app.
+
+[ ] Mise à jour de NEXTAUTH_URL : Changer http://localhost:3000 par https://www.ton-domaine.com dans Vercel.
+
+[ ] Sauvegarde DB : Activer les sauvegardes automatiques sur Supabase.
+
+
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------

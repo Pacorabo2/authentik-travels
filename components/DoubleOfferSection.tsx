@@ -30,7 +30,7 @@ export default function DoubleOfferSection() {
               className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
               style={{
                 backgroundImage:
-                  "url('https://images.unsplash.com/photo-1545622783-b3e021430fee?q=80&w=2000&auto=format&fit=crop')",
+                  "url('https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/AUTENTIK%20(92%20de%20143).jpg')",
               }}
             />
 
@@ -64,7 +64,7 @@ export default function DoubleOfferSection() {
               className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
               style={{
                 backgroundImage:
-                  "url('https://images.unsplash.com/photo-1545622783-b3e021430fee?q=80&w=2000&auto=format&fit=crop')",
+                  "url('https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/AUTENTIK%20(8%20de%2052).jpg')",
               }}
             />
 
