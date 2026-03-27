@@ -47,7 +47,7 @@ export default function Footer() {
                   href="/voyages/cuba"
                   className="hover:text-amber-500 transition-colors"
                 >
-                  Destinations (Cuba, etc.)
+                  Destinations
                 </Link>
               </li>
             </ul>
