@@ -1,5 +1,5 @@
-// components/StorytellingSection.tsx
 import Link from "next/link";
+import Image from "next/image";
 
 export default function StorytellingSection() {
   return (
@@ -9,10 +9,12 @@ export default function StorytellingSection() {
         <div className="w-full lg:w-1/2 relative">
           {/* Conteneur de l'image avec un ratio spécifique et une ombre */}
           <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl relative z-10">
-            <img
-              src="https://images.unsplash.com/photo-1506452815418-60bb4d35e76a?q=80&w=2000&auto=format&fit=crop"
-              alt="Voyageurs dansant et souriant en Amérique Latine"
-              className="w-full h-full object-cover"
+            <Image
+              src="https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/_DSC3127.JPG"
+              alt="Un cubain avec un cigare à la main souriant"
+              fill // Remplit le conteneur parent
+              className="object-cover transition-transform duration-1000 hover:scale-105"
+              sizes="(max-w-768px) 100vw, 50vw"
             />
           </div>
 
