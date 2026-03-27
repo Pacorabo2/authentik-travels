@@ -50,7 +50,7 @@ export default function HeroSection() {
 
           {/* Bouton Secondaire (Voyages de groupe) */}
           <Link
-            href="/voyages"
+            href="/groupTrip"
             className="bg-transparent border-2 border-white hover:bg-white hover:text-black text-white font-semibold py-4 px-8 rounded-full transition-all duration-300"
           >
             Voir les voyages

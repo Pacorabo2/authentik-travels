@@ -28,7 +28,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
-                  href="/voyages"
+                  href="/groupTrip"
                   className="hover:text-amber-500 transition-colors"
                 >
                   Voyages de Groupe

@@ -1,5 +1,3 @@
-// components/Header.tsx
-
 // Cette ligne est OBLIGATOIRE pour utiliser les interactions (clics, scroll)
 "use client";
 
@@ -60,7 +58,7 @@ export default function Header() {
         {/* 2. MENU ORDINATEUR (Caché sur mobile grâce à 'hidden md:flex') */}
         <nav className="hidden md:flex items-center gap-8 font-medium">
           <Link
-            href="/voyages"
+            href="/groupTrip"
             className="hover:text-amber-500 transition-colors"
           >
             Nos Voyages
@@ -126,7 +124,7 @@ export default function Header() {
         <div className="md:hidden absolute top-full left-0 w-full bg-white text-gray-900 shadow-xl border-t border-gray-100 flex flex-col py-4 px-4 gap-4 font-medium">
           {/* On ajoute onClick pour fermer le menu quand l'utilisateur clique sur un lien */}
           <Link
-            href="/voyages"
+            href="/groupTrip"
             onClick={() => setIsMobileMenuOpen(false)}
             className="p-2 hover:bg-gray-50 rounded-lg"
           >

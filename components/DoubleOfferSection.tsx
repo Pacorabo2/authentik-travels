@@ -22,7 +22,7 @@ export default function DoubleOfferSection() {
           {/* CARTE 1 : VOYAGES DE GROUPE */}
           {/* 'group' permet d'activer des effets sur les éléments enfants lors du survol de la carte */}
           <Link
-            href="/voyages"
+            href="/groupTrip"
             className="group relative rounded-2xl overflow-hidden h-[500px] shadow-lg flex items-end"
           >
             {/* Image de fond (Placeholder) */}
