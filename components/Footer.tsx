@@ -77,7 +77,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/ambassadeur"
+                  href="/ambassador"
                   className="hover:text-amber-500 transition-colors"
                 >
                   Devenir Professeur Partenaire
