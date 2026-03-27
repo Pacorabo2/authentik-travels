@@ -4,8 +4,7 @@ import Link from "next/link";
 export default function HeroSection() {
   // C'est ici que tu mettras l'URL de ta vidéo stockée sur Supabase ou AWS
   // Pour l'instant, j'ai mis une vidéo de test libre de droits pour que tu voies le résultat
-  const videoUrl =
-    "https://cdn.pixabay.com/video/2020/04/17/36423-411481555_large.mp4";
+  const videoUrl = "/videos/hero-bg.mp4";
 
   return (
     // 'relative h-screen' = prend toute la hauteur de l'écran et sert de repère pour les éléments absolus
