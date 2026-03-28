@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { updateCircuit } from "../actions";
+import ProgramEditor from "../_components/ProgramEditor";
 
 export default async function EditCircuitPage({
   params,
@@ -146,6 +147,8 @@ export default async function EditCircuitPage({
             className="w-full p-6 bg-slate-50 rounded-[1.5rem] border-none focus:ring-2 focus:ring-amber-500 leading-relaxed text-slate-700"
           />
         </div>
+        {/* PROGRAMME JOURNALIER STRUCTURE JSON*/}
+        <ProgramEditor initialProgram={trip.program} />
 
         <div className="flex justify-end pt-6 space-x-4">
           <Link

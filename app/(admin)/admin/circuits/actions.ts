@@ -73,6 +73,10 @@ export async function updateCircuit(id: string, formData: FormData) {
   // Conversion explicite en nombre (Int)
   const circuitId = parseInt(id);
 
+  // On récupère le programme JSON
+  const programRaw = formData.get("program") as string;
+  const program = programRaw ? JSON.parse(programRaw) : [];
+
   await prisma.groupTrip.update({
     where: { id: circuitId },
     data: {
@@ -86,7 +90,7 @@ export async function updateCircuit(id: string, formData: FormData) {
       pricePlatinium: price * 1.5,
       depositAmount: price * 0.3,
       destinationId: destinationId,
-      // Note: On ne touche pas au 'program' ici, on fera une action dédiée
+      program: program, // Prisma gère la conversion vers jsonb automatiquement
     },
   });
 
