@@ -1,7 +1,7 @@
 // app/(admin)/admin/destinations/page.tsx
 import prisma from "@/lib/prisma";
 import Link from "next/link";
-import { deleteDestination } from "./actions";
+import FlashMessage from "./_components/FlashMessage";
 import DeleteDestinationButton from "./_components/DeleteDestinationButton";
 
 export default async function AdminDestinations({
@@ -10,6 +10,7 @@ export default async function AdminDestinations({
   searchParams: Promise<{ success?: string; deleted?: string }>;
 }) {
   const { success, deleted } = await searchParams;
+
   const destinations = await prisma.destination.findMany({
     orderBy: { name: "asc" },
   });
@@ -18,14 +19,17 @@ export default async function AdminDestinations({
     <div className="space-y-8">
       {/* ALERTES DE SUCCÈS OU SUPPRESSION */}
       {success === "true" && (
-        <div className="bg-emerald-500 text-white p-4 rounded-2xl font-bold shadow-lg shadow-emerald-200 animate-in fade-in slide-in-from-top-4 duration-500">
-          ✅ Destination enregistrée avec succès !
-        </div>
+        <FlashMessage
+          message="✅ Destination enregistrée avec succès !"
+          type="success"
+        />
       )}
+
       {deleted === "true" && (
-        <div className="bg-amber-500 text-white p-4 rounded-2xl font-bold shadow-lg shadow-amber-200 animate-in fade-in slide-in-from-top-4 duration-500">
-          🗑️ Destination supprimée.
-        </div>
+        <FlashMessage
+          message="🗑️ Destination supprimée avec succès."
+          type="deleted"
+        />
       )}
 
       {/* HEADER DE LA PAGE AVEC LE BOUTON AJOUTER */}
