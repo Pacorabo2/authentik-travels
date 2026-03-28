@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import { updateDestination } from "./actions";
+import { updateDestination } from "../actions";
 
 export default async function EditDestinationPage({
   params,
