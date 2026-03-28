@@ -3,13 +3,18 @@ import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
 
-const connectionString = `${process.env.DATABASE_URL}`;
+// Sécurité : on s'assure que la variable existe
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error("DATABASE_URL is not defined in your environment variables");
+}
 
 const pool = new Pool({ connectionString });
 const adapter = new PrismaPg(pool);
 
 const prismaClientSingleton = () => {
-  // On passe l'adapter ici pour satisfaire Prisma 7
+  // Ton code est parfait ici : Prisma 7 adore les adapters !
   return new PrismaClient({ adapter });
 };
 

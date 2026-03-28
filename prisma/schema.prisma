@@ -74,7 +74,7 @@ model GroupTrip {
   
   priceBase       Float       
   pricePremium    Float       
-  pricePlatinum   Float       
+  pricePlatinium   Float       
   
   depositAmount   Float       @default(500)
   status          TripStatus  @default(DRAFT)
