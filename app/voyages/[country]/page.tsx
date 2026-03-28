@@ -26,9 +26,15 @@ export default async function CountryLandingPage({
           src={`/videos/destinations/${country.toLowerCase()}.mp4`}
         />
         <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-          <h1 className="text-7xl md:text-9xl font-black italic text-white uppercase tracking-tighter">
+          {/* <h1 className="text-7xl md:text-9xl font-black italic text-white uppercase tracking-tighter">
             {countryName}
             <span className="text-amber-500">.</span>
+          </h1> */}
+          <h1 className="text-7xl md:text-9xl font-black text-white mix-blend-overlay opacity-90 uppercase italic tracking-tighter">
+            {countryName}
+            <span className="text-amber-500 mix-blend-overlay opacity-90">
+              .
+            </span>
           </h1>
         </div>
       </section>
