@@ -32,5 +32,5 @@ export async function updateDestination(id: string, formData: FormData) {
   revalidatePath("/admin/destinations"); // La liste admin pour voir le changement de statut
 
   // 4. Redirection
-  redirect("/admin/destinations");
+  redirect("/admin/destinations?success=true");
 }
