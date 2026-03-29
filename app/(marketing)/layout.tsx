@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "Agence de voyage spécialisée dans les séjours de groupe (danse) et la création d'itinéraires sur mesure en Amérique Latine.",
 };
 
-export default function RootLayout({
+export default function MarketingLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
