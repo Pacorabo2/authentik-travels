@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 // Importation de nos composants globaux
-import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton"; // <-- 1. Nouvel import
 
@@ -21,21 +20,16 @@ export default function MarketingLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
-      <body
-        className={`${inter.className} min-h-screen flex flex-col relative`}
-        suppressHydrationWarning={true}
-      >
-        {/* LE MENU DE NAVIGATION */}
-        <Header />
+    <body
+      className={`${inter.className} min-h-screen flex flex-col relative`}
+      suppressHydrationWarning={true}
+    >
+      <main className="flex-grow">{children}</main>
 
-        <main className="flex-grow">{children}</main>
+      <Footer />
 
-        <Footer />
-
-        {/* <-- 2. Le bouton WhatsApp placé ici sera sur toutes les pages ! */}
-        <WhatsAppButton />
-      </body>
-    </html>
+      {/* <-- 2. Le bouton WhatsApp placé ici sera sur toutes les pages ! */}
+      <WhatsAppButton />
+    </body>
   );
 }

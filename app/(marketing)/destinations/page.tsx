@@ -3,75 +3,97 @@ import Link from "next/link";
 import Image from "next/image";
 
 export default async function DestinationsPage() {
-  // On récupère toutes les destinations pour les lister
   const destinations = await prisma.destination.findMany({
     orderBy: { name: "asc" },
   });
 
   return (
     <main className="bg-white min-h-screen">
-      {/* HERO DE LA PAGE LISTE */}
-      <section className="bg-slate-900 py-24 px-6 text-center">
-        <span className="text-amber-500 font-black uppercase tracking-[0.3em] text-xs mb-4 block">
-          Explorez le monde
-        </span>
-        <h1 className="text-5xl md:text-7xl font-black text-white italic uppercase tracking-tighter">
-          Nos{" "}
-          <span className="text-amber-500 text-6xl md:text-8xl">
-            Destinations
+      {/* SECTION A : HERO (Inchangé pour la cohérence) */}
+      <section className="relative h-[90vh] w-full flex items-center justify-center bg-slate-900 overflow-hidden">
+        <Image
+          src="https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/_DSC9533.JPG"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover opacity-60"
+          alt="Destinations Authentik"
+        />
+        <div className="relative z-10 text-center px-4">
+          <span className="text-amber-500 font-black uppercase tracking-[0.5em] text-xs mb-4 block animate-fade-in">
+            Explorez nos horizons
           </span>
-        </h1>
-      </section>
-
-      {/* GRILLE DES PAYS */}
-      <section className="container mx-auto py-20 px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {destinations.map((dest) => (
-            <Link
-              key={dest.id}
-              href={`/destinations/${dest.slug}`}
-              className="group relative h-[500px] rounded-[3rem] overflow-hidden shadow-2xl transition-transform hover:-translate-y-2 duration-500"
-            >
-              {/* Image de fond du pays */}
-              <Image
-                src={
-                  dest.imageUrl ||
-                  "https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/_DSC3127.JPG"
-                }
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover group-hover:scale-110 transition-transform duration-700"
-                alt={dest.name}
-              />
-
-              {/* Overlay dégradé pour la lisibilité */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent opacity-80" />
-
-              {/* Infos du pays */}
-              <div className="absolute bottom-12 left-12 right-12 text-white">
-                <span className="text-amber-500 font-black uppercase tracking-widest text-sm mb-2 block">
-                  {dest.tagline}
-                </span>
-                <h2 className="text-5xl font-black italic uppercase tracking-tighter mb-4">
-                  {dest.name}
-                </h2>
-                <div className="flex items-center gap-4">
-                  <span className="bg-white/20 backdrop-blur-md px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest border border-white/10">
-                    Nos circuits →
-                  </span>
-                </div>
-              </div>
-            </Link>
-          ))}
+          <h1 className="text-6xl md:text-8xl font-black text-white italic uppercase tracking-tighter leading-none">
+            Nos <br />
+            <span className="text-amber-500 text-7xl md:text-9xl">
+              Destinations
+            </span>
+          </h1>
         </div>
 
-        {destinations.length === 0 && (
-          <div className="text-center py-20">
-            <p className="text-slate-400 italic">
-              Chargement des destinations...
-            </p>
+        {/* DÉGRADÉ SUBTILE (128px) VERS LE BLANC */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
+      </section>
+
+      {/* SECTION B : LES SECTIONS PAYS EN DEUX COLONNES */}
+      <section className="py-20">
+        <div className="container mx-auto px-6 md:px-20">
+          <div className="space-y-32">
+            {" "}
+            {/* Grand espace entre les pays */}
+            {destinations.map((dest, index) => (
+              <div
+                key={dest.id}
+                className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center group"
+              >
+                {/* COLONNE GAUCHE : LA PHOTO */}
+                <div className="relative h-[50vh] md:h-[60vh] lg:h-[70vh] w-full overflow-hidden rounded-[3rem] shadow-2xl transition-all duration-700 hover:-translate-y-2">
+                  <Image
+                    src={dest.imageUrl || "/placeholder-country.jpg"}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover group-hover:scale-110 transition-transform duration-1000"
+                    alt={dest.name}
+                  />
+                  {/* Petit overlay sombre en bas pour le style */}
+                  <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-900/60 to-transparent" />
+                </div>
+
+                {/* COLONNE DROITE : LE TEXTE */}
+                <div className="space-y-8 flex flex-col justify-center">
+                  <div className="space-y-3">
+                    {/* Numérotation élégante (01, 02, etc.) */}
+                    <span className="text-amber-500 font-black text-5xl opacity-30 block italic tracking-tighter">
+                      0{index + 1}
+                    </span>
+                    <span className="text-amber-500 font-black uppercase tracking-[0.3em] text-sm block">
+                      {dest.tagline}
+                    </span>
+                    <h2 className="text-6xl md:text-8xl font-black text-slate-900 italic uppercase tracking-tighter leading-none group-hover:text-amber-500 transition-colors">
+                      {dest.name}
+                    </h2>
+                  </div>
+
+                  <p className="text-slate-600 text-lg md:text-xl font-medium leading-relaxed max-w-xl">
+                    {dest.description}
+                  </p>
+
+                  <div className="pt-8">
+                    <Link
+                      href={`/destinations/${dest.slug}`}
+                      className="inline-flex items-center gap-6 bg-slate-900 text-white px-10 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em] hover:bg-amber-500 transition-all duration-300 shadow-xl shadow-slate-200 group/btn"
+                    >
+                      Découvrir cette destination
+                      <span className="group-hover/btn:translate-x-2 transition-transform">
+                        →
+                      </span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-        )}
+        </div>
       </section>
     </main>
   );
