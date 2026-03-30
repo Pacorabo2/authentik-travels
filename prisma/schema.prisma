@@ -13,83 +13,74 @@ datasource db {
 // 1. DESTINATIONS & PAGES PAYS (NOUVEAU)
 // ------------------------------------------------------
 model Destination {
-  id               String      @id @default(cuid())
-  name             String      @unique
-  slug             String      @unique
-  heroVideoUrl     String?  
-  tagline          String?  
-  presentationImg  String?  
-  description      String      @db.Text
-  
-  // RELATIONS : Un pays a plusieurs types de voyages
-  groupTrips       GroupTrip[] 
-  soloTrips        SoloTrip[]  
-
-  isPublished      Boolean     @default(false)
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
+  id            String      @id @default(cuid())
+  name          String      @unique
+  slug          String      @unique
+  tagline       String?     // "La perle des Caraïbes"
+  description   String      @db.Text
+  heroVideoUrl  String?
+  imageUrl      String?
+  currency1     String?     
+  currency2     String?     
+  trips         GroupTrip[] // Relation avec les voyages de groupe (Niche)
+  circuits      Circuit[]   // Relation avec les circuits classiques
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 
 // ------------------------------------------------------
-// 2. VOYAGES INDIVIDUELS / CIRCUITS TYPES (NOUVEAU)
+// 2. VOYAGES INDIVIDUELS / CIRCUITS TYPES (Classique / Famille / StandardAU)
 // ------------------------------------------------------
-model SoloTrip {
-  id            String      @id @default(cuid())
-  title         String
-  slug          String      @unique
-  description   String      @db.Text
-  duration      Int         
-  priceBase     Int         
-  imageUrl      String?
-  
-  // Relation avec la destination
-  destinationId String
-  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
-
-  isPublished   Boolean     @default(true)
-  createdAt     DateTime    @default(now())
+model Circuit {
+  id              String      @id @default(cuid())
+  title           String
+  slug            String      @unique
+  tagline         String?     // "Le Costa Rica en famille"
+  description     String      @db.Text
+  presentationImg String?
+  duration        Int         
+  priceBase       Float       
+  pricePremium    Float?      
+  pricePlatinium  Float?      
+  program         Json        
+  isPublished     Boolean     @default(false)
+  destinationId   String
+  destination     Destination @relation(fields: [destinationId], references: [id])
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
 }
 
 // ------------------------------------------------------
 // 3. VOYAGES DE GROUPE (Modifié pour la relation)
 // ------------------------------------------------------
 model GroupTrip {
-  id              Int         @id @default(autoincrement())
+  id              String      @id @default(cuid())
   title           String
-  slug            String      @unique 
-  country         String?
-  
-  // Relation optionnelle avec Destination
-  destinationId   String?
-  destination     Destination? @relation(fields: [destinationId], references: [id])
-
-  flyerUrl        String?      
-  heroVideoUrl    String?      
+  slug            String      @unique
   description     String      @db.Text
-  program         Json        
-  
   startDate       DateTime
   endDate         DateTime
-  capacity        Int         
-  
-  priceBase       Float       
-  pricePremium    Float       
-  pricePlatinium   Float       
-  
-  depositAmount   Float       @default(500)
+  duration        Int
+  capacity        Int
+  program         Json        // Itinéraire détaillé
+  priceBase       Float
+  pricePremium    Float?
+  pricePlatinium  Float?
+  depositAmount   Float?
   status          TripStatus  @default(DRAFT)
-  bookings        Booking[]  
-  
+  destinationId   String
+  destination     Destination @relation(fields: [destinationId], references: [id])
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
+  bookings        Booking[]
 }
 
 enum TripStatus {
-  DRAFT
-  PUBLISHED
-  FULL
-  COMPLETED
-  CANCELLED
+  DRAFT      // En préparation (non visible sur le site)
+  PUBLISHED  // En ligne et disponible
+  FULL       // COMPLET (Visible mais plus de réservations possibles)
+  CANCELLED  // Annulé
+  COMPLETED  // Terminé (Passé)
 }
 
 // ------------------------------------------------------
@@ -116,7 +107,7 @@ model User {
 // ------------------------------------------------------
 model Booking {
   id           Int        @id @default(autoincrement())
-  tripId       Int
+  tripId       String
   groupTrip    GroupTrip  @relation(fields: [tripId], references: [id], onDelete: Cascade)
   userName     String
   userEmail    String

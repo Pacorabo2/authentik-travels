@@ -169,3 +169,11 @@ Une fois tout configuré en Live, il faut vérifier que la chaîne fonctionne av
 
 -------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------
+
+-----------------------
+Mise à Jour BDD
+---------------------------
+
+Pour mettre à jour la base de données, une fois modifié le fichier '/prisma/schema.prisma', exécuter la commande
+```bash
+$env:DATABASE_URL="TON_LIEN_SUPABASE"; npx prisma db push```

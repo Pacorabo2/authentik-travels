@@ -1,3 +1,4 @@
+// Le détail d'un voyage de groupe "Niche"
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Image from "next/image";
