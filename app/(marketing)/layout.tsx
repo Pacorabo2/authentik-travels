@@ -1,10 +1,10 @@
-// app/layout.tsx
+// app/(marketing)/layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 // Importation de nos composants globaux
 import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton"; // <-- 1. Nouvel import
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,16 +20,16 @@ export default function MarketingLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <body
-      className={`${inter.className} min-h-screen flex flex-col relative`}
-      suppressHydrationWarning={true}
-    >
+    /* On remplace <body> par une <div> ou un fragment. 
+       On garde les classes de mise en page pour que le Footer reste en bas.
+    */
+    <div className={`${inter.className} min-h-screen flex flex-col relative`}>
       <main className="flex-grow">{children}</main>
 
       <Footer />
 
-      {/* <-- 2. Le bouton WhatsApp placé ici sera sur toutes les pages ! */}
+      {/* Le bouton WhatsApp reste bien présent sur toutes les pages marketing */}
       <WhatsAppButton />
-    </body>
+    </div>
   );
 }
