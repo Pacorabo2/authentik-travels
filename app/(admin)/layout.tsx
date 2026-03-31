@@ -8,57 +8,77 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // 1. On récupère la session directement sur le serveur
+  // 1. Protection de la route : Vérification de la session côté serveur
   const session = await getServerSession(authOptions);
 
-  // 2. Si l'utilisateur n'est pas connecté, redirection immédiate
+  // 2. Redirection si non connecté
   if (!session) {
     redirect("/login");
   }
 
-  // 3. Si on est ici, l'utilisateur est admin, on affiche la Sidebar
   return (
-    <div className="flex min-h-screen bg-slate-100 font-sans">
-      <aside className="w-72 bg-slate-900 text-white p-8 flex flex-col shadow-2xl">
+    // On utilise une structure Flex pour la Sidebar fixe et le contenu scrollable
+    <div className="flex min-h-screen bg-slate-100 font-sans antialiased text-slate-900">
+      {/* SIDEBAR : Fixe à gauche */}
+      <aside className="w-72 bg-slate-900 text-white p-8 flex flex-col shadow-2xl sticky top-0 h-screen">
         <div className="mb-12">
           <h2 className="text-3xl font-black italic tracking-tighter uppercase text-white">
             Admin<span className="text-amber-500">.</span>
           </h2>
-          <p className="text-[10px] text-slate-500 uppercase font-black tracking-[0.3em] mt-2">
-            Athentik Travels
+          <p className="text-[10px] text-slate-500 uppercase font-black tracking-[0.3em] mt-2 leading-none">
+            Authentik Travels
           </p>
         </div>
 
+        {/* NAVIGATION ADMIN */}
         <nav className="space-y-3 flex-grow">
           <Link
             href="/admin/destinations"
-            className="group flex items-center p-4 rounded-2xl bg-slate-800 text-amber-500 font-bold transition-all"
+            className="group flex items-center p-4 rounded-2xl bg-slate-800 text-amber-500 font-bold hover:scale-[1.02] transition-all"
           >
-            <span className="mr-3">🌍</span> Destinations
+            <span className="mr-3 text-lg">🌍</span> Destinations
           </Link>
           <Link
             href="/admin/circuits"
-            className="group flex items-center p-4 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-white transition-all font-bold"
+            className="group flex items-center p-4 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-white transition-all font-bold hover:scale-[1.02]"
           >
-            <span className="mr-3">🚀</span> Circuits
+            <span className="mr-3 text-lg">🚀</span> Circuits
+          </Link>
+          <Link
+            href="/admin/bookings"
+            className="group flex items-center p-4 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-white transition-all font-bold hover:scale-[1.02]"
+          >
+            <span className="mr-3 text-lg">💳</span> Réservations
           </Link>
         </nav>
 
-        <div className="pt-8 border-t border-slate-800">
-          <p className="text-xs text-slate-500 mb-4 font-medium italic">
-            Connecté en tant que : <br />
-            {session.user?.email}
-          </p>
+        {/* FOOTER SIDEBAR : Infos Session */}
+        <div className="pt-8 border-t border-slate-800 mt-auto">
+          <div className="mb-6">
+            <p className="text-[10px] font-black uppercase text-slate-500 tracking-widest mb-1">
+              Session active
+            </p>
+            <p className="text-xs text-white font-bold truncate italic">
+              {session.user?.email}
+            </p>
+          </div>
+
           <Link
             href="/"
-            className="text-sm font-bold text-slate-400 hover:text-white flex items-center transition-colors"
+            className="group text-sm font-bold text-slate-400 hover:text-white flex items-center transition-all"
           >
-            ← Retour au site
+            <span className="mr-2 group-hover:-translate-x-1 transition-transform">
+              ←
+            </span>
+            Retour au site
           </Link>
         </div>
       </aside>
 
-      <main className="flex-1 p-12 overflow-y-auto">{children}</main>
+      {/* ZONE DE CONTENU PRINCIPALE */}
+      <main className="flex-1 p-12 bg-slate-100 overflow-y-auto">
+        <div className="max-w-6xl mx-auto">{children}</div>
+      </main>
     </div>
   );
 }

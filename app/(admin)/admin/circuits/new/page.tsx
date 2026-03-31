@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { createCircuit } from "../actions";
+import ItineraryBuilder from "@/app/components/admin/ItineraryBuilder";
 
 export default async function NewCircuitPage() {
   // On récupère toutes les destinations pour le menu déroulant
@@ -122,6 +123,9 @@ export default async function NewCircuitPage() {
             className="w-full p-6 bg-slate-50 rounded-[1.5rem] border-none focus:ring-2 focus:ring-amber-500 leading-relaxed"
           />
         </div>
+
+        {/* AJOUT DE L'ITINÉRAIRE DYNAMIQUE */}
+        <ItineraryBuilder />
 
         <div className="flex justify-end pt-6 space-x-4">
           <Link
