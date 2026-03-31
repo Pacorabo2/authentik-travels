@@ -49,13 +49,12 @@ export default function Header({
       <div className="max-w-7xl mx-auto px-4 md:px-8 flex justify-between items-center">
         {/* 1. LOGO */}
         <Link href="/" className="flex items-center">
-          <Image
+          <img
             src="/logo.png"
             alt="Logo Authentik Travels"
-            width={180}
-            height={40}
-            priority
-            className="w-auto h-10 object-contain"
+            className="h-10 w-auto object-contain"
+            // On ajoute loading="eager" pour simuler le comportement "priority"
+            loading="eager"
           />
         </Link>
 
