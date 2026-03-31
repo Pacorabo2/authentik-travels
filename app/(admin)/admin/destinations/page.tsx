@@ -60,7 +60,10 @@ export default async function AdminDestinations({
                 Nom du Pays
               </th>
               <th className="px-10 py-6 font-bold uppercase text-[10px] tracking-[0.2em] text-slate-400">
-                Continent
+                Monnaie1
+              </th>
+              <th className="px-10 py-6 font-bold uppercase text-[10px] tracking-[0.2em] text-slate-400">
+                Monnaie2
               </th>
               <th className="px-10 py-6 font-bold uppercase text-[10px] tracking-[0.2em] text-slate-400">
                 Statut
@@ -82,7 +85,13 @@ export default async function AdminDestinations({
                 <td className="px-10 py-6">
                   <div className="flex items-center gap-2 text-slate-500 text-sm font-medium">
                     <Globe size={14} className="text-slate-300" />
-                    {dest.continent || "Non défini"}
+                    {dest.currency1 || "Non défini"}
+                  </div>
+                </td>
+                <td className="px-10 py-6">
+                  <div className="flex items-center gap-2 text-slate-500 text-sm font-medium">
+                    <Globe size={14} className="text-slate-300" />
+                    {dest.currency2 || "Non défini"}
                   </div>
                 </td>
                 <td className="px-10 py-6">
