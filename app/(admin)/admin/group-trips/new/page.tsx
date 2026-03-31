@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { createGroupTrip } from "../actions";
+import ItineraryBuilder from "@/app/components/admin/ItineraryBuilder";
 
 export default async function NewGroupTripPage() {
   // On récupère les destinations pour le menu déroulant
@@ -26,7 +27,7 @@ export default async function NewGroupTripPage() {
         action={createGroupTrip}
         className="space-y-8 bg-white p-12 rounded-[3rem] shadow-xl border border-slate-100"
       >
-        {/* TITRE & DESTINATION */}
+        {/* SECTION 1 : INFOS GÉNÉRALES */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           <div className="space-y-3">
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
@@ -85,7 +86,7 @@ export default async function NewGroupTripPage() {
           </div>
           <div className="space-y-3">
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
-              Places disponibles
+              Nombre de places
             </label>
             <input
               name="capacity"
@@ -97,10 +98,10 @@ export default async function NewGroupTripPage() {
           </div>
         </div>
 
-        {/* PRIX DE BASE (Les autres sont calculés ou saisis) */}
+        {/* SECTION 3 : TARIFICATION (FINANCE) */}
         <div className="p-8 bg-amber-50 rounded-[2rem] border border-amber-100 space-y-6">
           <h3 className="font-black uppercase text-xs tracking-widest text-amber-600">
-            Tarification
+            Tarification & Options Stripe
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div className="space-y-3">
@@ -127,8 +128,48 @@ export default async function NewGroupTripPage() {
                 className="w-full p-5 bg-white rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-bold text-slate-900"
               />
             </div>
+            <div className="space-y-3">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
+                Prix Premium Optionnel (€)
+              </label>
+              <input
+                name="premiumPrice"
+                type="number"
+                required
+                placeholder="500"
+                className="w-full p-5 bg-white rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-bold text-slate-900"
+              />
+            </div>
+            <div className="space-y-3">
+              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
+                Prix Platinium Optionnel (€)
+              </label>
+              <input
+                name="platinumPrice"
+                type="number"
+                required
+                placeholder="500"
+                className="w-full p-5 bg-white rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-bold text-slate-900"
+              />
+            </div>
           </div>
         </div>
+        {/* SECTION 4 : DESCRIPTION DU VOYAGE*/}
+        <div className="space-y-3">
+          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">
+            Description du voyage
+          </label>
+          <textarea
+            name="description"
+            rows={4}
+            className="w-full p-5 bg-slate-50 rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500"
+            placeholder="Présentez ce départ en quelques mots..."
+          />
+        </div>
+
+        {/* SECTION 5 : PROGRAMME DYNAMIQUE */}
+        <hr className="border-slate-100" />
+        <ItineraryBuilder />
 
         <div className="flex justify-end pt-6 space-x-4">
           <Link

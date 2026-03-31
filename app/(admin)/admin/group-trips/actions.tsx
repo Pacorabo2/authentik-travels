@@ -4,104 +4,118 @@
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { TripStatus } from "@prisma/client";
 
 /**
  * CRÉATION D'UN VOYAGE DE GROUPE
  */
+// --- 1. CRÉATION D'UN VOYAGE DE GROUPE ---
 export async function createGroupTrip(formData: FormData) {
   const title = formData.get("title") as string;
-  const destinationId = formData.get("destinationId") as string;
+  const priceBase = Number(formData.get("priceBase"));
   const startDateStr = formData.get("startDate") as string;
   const duration = Number(formData.get("duration"));
-  const priceBase = Number(formData.get("priceBase"));
-  const capacity = Number(formData.get("capacity"));
-  const depositAmount = Number(formData.get("depositAmount"));
 
-  // 1. Extraction dynamique de l'itinéraire (notre composant ItineraryBuilder)
-  const itineraryCount = Number(formData.get("itineraryCount") || 0);
-  const program = [];
-
-  for (let i = 0; i < itineraryCount; i++) {
-    const dayTitle = formData.get(`day-title-${i}`) as string;
-    const dayDesc = formData.get(`day-desc-${i}`) as string;
-
-    if (dayTitle || dayDesc) {
-      program.push({
-        day: i + 1,
-        title: dayTitle || "",
-        description: dayDesc || "",
-      });
-    }
-  }
-
-  // 2. Calcul de la date de fin (endDate)
+  // Calcul automatique de la date de fin
   const startDate = new Date(startDateStr);
   const endDate = new Date(startDate);
   endDate.setDate(startDate.getDate() + duration);
 
-  // 3. Génération du slug unique
+  // Reconstruction du programme (ItineraryBuilder)
+  const itineraryCount = Number(formData.get("itineraryCount") || 0);
+  const program = [];
+  for (let i = 0; i < itineraryCount; i++) {
+    const t = formData.get(`day-title-${i}`) as string;
+    const d = formData.get(`day-desc-${i}`) as string;
+    if (t || d) {
+      program.push({
+        day: i + 1,
+        title: t || "",
+        description: d || "",
+      });
+    }
+  }
+
+  // Génération du slug unique
   const slug = `${title
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/ /g, "-")
-    .replace(/[^\w-]+/g, "")}-${new Date().getFullYear()}`;
+    .replace(/[^\w-]+/g, "")}-${Date.now()}`;
 
-  // 4. Insertion en base de données
-  await prisma.groupTrip.create({
-    data: {
-      title,
-      slug,
-      description: "", // On pourra ajouter un champ description plus tard si besoin
-      startDate,
-      endDate,
-      duration,
-      capacity,
-      // On insère le tableau d'objets construit plus haut
-      program: program,
-      priceBase,
-      // Calcul automatique des options (modifiable via l'Edit plus tard)
-      pricePremium: priceBase * 1.2,
-      pricePlatinium: priceBase * 1.5,
-      depositAmount: depositAmount || priceBase * 0.3, // 30% par défaut si vide
-      destinationId,
-      status: "PLANNED", // Statut initial
-    },
-  });
+  try {
+    await prisma.groupTrip.create({
+      data: {
+        title,
+        slug,
+        description: (formData.get("description") as string) || "", // Correction de l'erreur "missing description"
+        startDate,
+        endDate,
+        duration,
+        capacity: Number(formData.get("capacity")),
+        priceBase,
+        pricePremium: Number(formData.get("pricePremium")) || priceBase * 1.2,
+        pricePlatinium:
+          Number(formData.get("pricePlatinium")) || priceBase * 1.5,
+        depositAmount: Number(formData.get("depositAmount")) || priceBase * 0.3,
+        destinationId: formData.get("destinationId") as string,
+        program: program as any,
+        status: TripStatus.PLANNED, // Correction de l'erreur "Expected TripStatus"
+      },
+    });
+  } catch (error) {
+    console.error("Erreur Prisma lors de la création :", error);
+    throw new Error("Erreur lors de l'enregistrement du voyage.");
+  }
 
-  // 4. Rafraîchissement des pages
   revalidatePath("/admin/group-trips");
-  revalidatePath("/groupTrip"); // La page catalogue client
   redirect("/admin/group-trips?success=true");
 }
 
-/**
- * MODIFICATION D'UN VOYAGE DE GROUPE
- */
-export async function updateGroupTrip(formData: FormData) {
-  const id = formData.get("id") as string;
-  const title = formData.get("title") as string;
+// --- 2. MODIFICATION D'UN VOYAGE DE GROUPE ---
+export async function updateGroupTrip(id: string, formData: FormData) {
+  const priceBase = Number(formData.get("priceBase"));
   const startDate = new Date(formData.get("startDate") as string);
   const duration = Number(formData.get("duration"));
   const endDate = new Date(startDate);
   endDate.setDate(startDate.getDate() + duration);
 
-  await prisma.groupTrip.update({
-    where: { id },
-    data: {
-      title,
-      destinationId: formData.get("destinationId") as string,
-      startDate,
-      endDate,
-      duration,
-      capacity: Number(formData.get("capacity")),
-      priceBase: Number(formData.get("priceBase")),
-      depositAmount: Number(formData.get("depositAmount")),
-    },
-  });
+  const itineraryCount = Number(formData.get("itineraryCount") || 0);
+  const program = [];
+  for (let i = 0; i < itineraryCount; i++) {
+    const t = formData.get(`day-title-${i}`) as string;
+    const d = formData.get(`day-desc-${i}`) as string;
+    if (t || d)
+      program.push({ day: i + 1, title: t || "", description: d || "" });
+  }
+
+  try {
+    await prisma.groupTrip.update({
+      where: { id },
+      data: {
+        title: formData.get("title") as string,
+        description: formData.get("description") as string,
+        startDate,
+        endDate,
+        duration,
+        capacity: Number(formData.get("capacity")),
+        priceBase,
+        pricePremium: Number(formData.get("pricePremium")) || priceBase * 1.2,
+        pricePlatinium:
+          Number(formData.get("pricePlatinium")) || priceBase * 1.5,
+        depositAmount: Number(formData.get("depositAmount")),
+        destinationId: formData.get("destinationId") as string,
+        program: program as any,
+      },
+    });
+  } catch (error) {
+    console.error("Erreur Prisma lors de la mise à jour :", error);
+    throw new Error("Erreur lors de la modification.");
+  }
 
   revalidatePath("/admin/group-trips");
-  revalidatePath("/groupTrip");
+  revalidatePath(`/admin/group-trips/${id}`);
   redirect("/admin/group-trips?success=true");
 }
 
