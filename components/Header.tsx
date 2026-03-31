@@ -40,7 +40,7 @@ export default function Header({
 
   const headerClasses = isSolidBackground
     ? "bg-white text-slate-900 shadow-md py-3"
-    : "bg-transparent text-white py-6";
+    : "bg-white text-slate-900 py-6";
 
   return (
     <header
