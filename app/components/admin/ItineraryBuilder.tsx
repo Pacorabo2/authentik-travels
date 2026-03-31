@@ -3,12 +3,38 @@
 import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 
-export default function ItineraryBuilder() {
-  const [days, setDays] = useState([{ title: "", desc: "" }]);
+// On ajoute l'interface pour accepter des données de la base
+interface ItineraryBuilderProps {
+  initialDays?: { title: string; description?: string; desc?: string }[];
+}
+
+export default function ItineraryBuilder({
+  initialDays,
+}: ItineraryBuilderProps) {
+  // Si initialDays existe, on l'utilise, sinon on part sur un jour vide
+  const [days, setDays] = useState(
+    initialDays && initialDays.length > 0
+      ? initialDays.map((d) => ({
+          title: d.title,
+          desc: d.desc || d.description || "",
+        }))
+      : [{ title: "", desc: "" }],
+  );
 
   const addDay = () => setDays([...days, { title: "", desc: "" }]);
   const removeDay = (index: number) =>
     setDays(days.filter((_, i) => i !== index));
+
+  // Fonction pour mettre à jour l'état local (nécessaire pour l'édition fluide)
+  const handleChange = (
+    index: number,
+    field: "title" | "desc",
+    value: string,
+  ) => {
+    const newDays = [...days];
+    newDays[index][field] = value;
+    setDays(newDays);
+  };
 
   return (
     <div className="space-y-6">
@@ -27,6 +53,8 @@ export default function ItineraryBuilder() {
             </span>
             <input
               name={`day-title-${index}`}
+              value={day.title}
+              onChange={(e) => handleChange(index, "title", e.target.value)}
               placeholder="Titre de la journée..."
               className="flex-grow bg-transparent border-none focus:ring-0 font-bold text-slate-900 p-0"
               required
@@ -41,6 +69,8 @@ export default function ItineraryBuilder() {
           </div>
           <textarea
             name={`day-desc-${index}`}
+            value={day.desc}
+            onChange={(e) => handleChange(index, "desc", e.target.value)}
             placeholder="Détails de l'étape..."
             rows={2}
             className="w-full bg-white rounded-xl p-4 border-none focus:ring-1 focus:ring-amber-500 text-sm"
@@ -57,7 +87,6 @@ export default function ItineraryBuilder() {
         <Plus size={18} /> Ajouter une étape
       </button>
 
-      {/* On stocke le nombre de jours pour que l'action Prisma sache combien en lire */}
       <input type="hidden" name="itineraryCount" value={days.length} />
     </div>
   );

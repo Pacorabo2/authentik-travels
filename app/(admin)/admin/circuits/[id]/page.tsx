@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { updateCircuit } from "../actions";
 import ProgramEditor from "../_components/ProgramEditor";
+import ItineraryManager from "@/app/components/admin/ItineraryManager";
 
 export default async function EditCircuitPage({
   params,
