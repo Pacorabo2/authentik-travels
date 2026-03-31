@@ -37,7 +37,7 @@ export default async function AdminCircuits({
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-4xl font-black italic uppercase tracking-tighter text-slate-900">
-            Catalogue <span className="text-amber-500">Circuits</span>
+            Catalogue des <span className="text-5xl text-amber-500">Circuits</span>
           </h1>
           <p className="text-slate-500 mt-1 font-medium">
             Gérez vos itinéraires classiques et programmes par destination.
@@ -48,7 +48,7 @@ export default async function AdminCircuits({
           href="/admin/circuits/new"
           className="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-amber-600 transition-all shadow-xl shadow-slate-200 flex items-center gap-2"
         >
-          <span className="text-lg">+</span> Nouveau circuit
+          <span className="text-lg">+</span> Créer un circuit
         </Link>
       </div>
 

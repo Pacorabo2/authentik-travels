@@ -11,7 +11,7 @@ export default async function AdminBookings() {
   return (
     <div className="space-y-8">
       <h1 className="text-3xl font-black italic uppercase text-slate-900">
-        Suivi des <span className="text-amber-500">Réservations</span>
+        Suivi des <span className="text-amber-500 text-4xl">Réservations</span>
       </h1>
 
       <div className="bg-white rounded-[2rem] shadow-sm border border-slate-100 overflow-hidden">

@@ -36,7 +36,7 @@ export default async function AdminDestinations({
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-4xl font-black italic uppercase tracking-tighter text-slate-900">
-            Destinations
+            Liste des <span className="text-5xl text-amber-500">Destinations</span>
           </h1>
           <p className="text-slate-500 mt-1 font-medium">
             Gérez votre catalogue de pays et continents.
@@ -47,7 +47,7 @@ export default async function AdminDestinations({
           href="/admin/destinations/new"
           className="bg-slate-900 text-white px-8 py-4 rounded-[1.2rem] font-black uppercase tracking-widest text-xs hover:bg-amber-600 transition-all shadow-xl shadow-slate-200 active:scale-95 flex items-center"
         >
-          <span className="text-xl mr-2">+</span> Ajouter une destination
+          <span className="text-xl mr-2">+</span> Créer une destination
         </Link>
       </div>
 

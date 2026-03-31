@@ -28,7 +28,7 @@ export default async function AdminGroupTrips({
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-4xl font-black italic uppercase tracking-tighter text-slate-900">
-            Voyages <span className="text-amber-500">de Groupe</span>
+            Voyages de <span className="text-amber-500 text-5xl">Groupe</span>
           </h1>
           <p className="text-slate-500 mt-1 font-medium">
             Planifiez vos départs à dates fixes et gérez les stocks.
@@ -39,7 +39,7 @@ export default async function AdminGroupTrips({
           href="/admin/group-trips/new"
           className="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-amber-600 transition-all shadow-xl shadow-slate-200 flex items-center gap-2"
         >
-          + Nouveau Départ
+          Créer un voyage
         </Link>
       </div>
 
