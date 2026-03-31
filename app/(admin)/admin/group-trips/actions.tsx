@@ -15,6 +15,8 @@ export async function createGroupTrip(formData: FormData) {
   const priceBase = Number(formData.get("priceBase"));
   const startDateStr = formData.get("startDate") as string;
   const duration = Number(formData.get("duration"));
+  const imageUrl = formData.get("imageUrl") as string;
+  const videoUrl = formData.get("videoUrl") as string;
 
   // Calcul automatique de la date de fin
   const startDate = new Date(startDateStr);
@@ -61,7 +63,9 @@ export async function createGroupTrip(formData: FormData) {
         depositAmount: Number(formData.get("depositAmount")) || priceBase * 0.3,
         destinationId: formData.get("destinationId") as string,
         program: program as any,
-        status: TripStatus.PLANNED, // Correction de l'erreur "Expected TripStatus"
+        imageUrl: imageUrl || null,
+        videoUrl: videoUrl || null,
+        status: TripStatus.DRAFT, // Correction de l'erreur "Expected TripStatus"
       },
     });
   } catch (error) {
@@ -107,6 +111,8 @@ export async function updateGroupTrip(id: string, formData: FormData) {
         depositAmount: Number(formData.get("depositAmount")),
         destinationId: formData.get("destinationId") as string,
         program: program as any,
+        imageUrl: formData.get("imageUrl") as string,
+        videoUrl: formData.get("videoUrl") as string,
       },
     });
   } catch (error) {

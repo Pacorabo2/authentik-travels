@@ -58,6 +58,8 @@ model GroupTrip {
   title           String
   slug            String      @unique
   description     String      @db.Text
+  imageUrl     String?    // Image de la carte ou miniature
+  videoUrl     String?    // URL de la vidéo Hero (YouTube/Vimeo ou MP4)
   startDate       DateTime
   endDate         DateTime
   duration        Int

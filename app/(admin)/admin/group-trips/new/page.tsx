@@ -166,8 +166,31 @@ export default async function NewGroupTripPage() {
             placeholder="Présentez ce départ en quelques mots..."
           />
         </div>
+        {/* SECTION 5 : CHARGEMENT VIDEO ET IMAGEURL */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100">
+          <div className="space-y-3">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">
+              Image de présentation (URL)
+            </label>
+            <input
+              name="imageUrl"
+              placeholder="https://images.unsplash.com/..."
+              className="w-full p-5 bg-white rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-medium"
+            />
+          </div>
+          <div className="space-y-3">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">
+              Vidéo Hero (URL)
+            </label>
+            <input
+              name="videoUrl"
+              placeholder="Lien YouTube ou MP4..."
+              className="w-full p-5 bg-white rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-medium"
+            />
+          </div>
+        </div>
 
-        {/* SECTION 5 : PROGRAMME DYNAMIQUE */}
+        {/* SECTION 6 : PROGRAMME DYNAMIQUE */}
         <hr className="border-slate-100" />
         <ItineraryBuilder />
 

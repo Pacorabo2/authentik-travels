@@ -116,6 +116,18 @@ export default async function EditGroupTripPage({
               className="w-full p-5 bg-slate-50 rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-bold"
             />
           </div>
+          <div className="space-y-3">
+            <input
+              name="imageUrl"
+              defaultValue={trip.imageUrl || ""}
+              className="..."
+            />
+            <input
+              name="videoUrl"
+              defaultValue={trip.videoUrl || ""}
+              className="..."
+            />
+          </div>
         </div>
 
         <div className="p-8 bg-slate-900 rounded-[2rem] text-white space-y-6">
