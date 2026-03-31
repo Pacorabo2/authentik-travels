@@ -21,9 +21,13 @@ model Destination {
   heroVideoUrl  String?
   imageUrl      String?
   currency1     String?     
-  currency2     String?     
+  currency2     String? 
+
+  // Relations  
   trips         GroupTrip[] // Relation avec les voyages de groupe (Niche)
   circuits      Circuit[]   // Relation avec les circuits classiques
+  posts        Post[]      // Relation avec les articles de blog
+
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 }
@@ -44,8 +48,11 @@ model Circuit {
   pricePlatinium  Float?      
   program         Json        
   isPublished     Boolean     @default(false)
+
+  // Relation Destination
   destinationId   String
   destination     Destination @relation(fields: [destinationId], references: [id])
+
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 }
@@ -70,13 +77,49 @@ model GroupTrip {
   pricePlatinium  Float?
   depositAmount   Float?
   status          TripStatus  @default(DRAFT)
+
+  // Relation Destination
   destinationId   String
   destination     Destination @relation(fields: [destinationId], references: [id])
+  
+  bookings        Booking[]
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
-  bookings        Booking[]
 }
 
+// ------------------------------------------------------
+// 4. BLOG (Nouveau - Structure SEO & Performance)
+// ------------------------------------------------------
+model Post {
+  id              String      @id @default(cuid())
+  title           String
+  slug            String      @unique
+  excerpt         String?     @db.Text // Pour les meta-tags et cartes de liste
+  content         String      @db.Text // Contenu riche (HTML/Markdown)
+  mainImage       String      // Image Hero de l'article
+  category        String      // Ex: "Conseils", "Récits", "Guide"
+  readingTime     Int?        // Temps estimé en minutes
+  
+  // SEO & Social
+  metaTitle       String?
+  metaDescription String?
+  featured        Boolean     @default(false) // Pour mise en avant sur Home/Blog
+  published       Boolean     @default(false)
+
+  // Relation Destination (Optionnel : lier un article à un pays)
+  destinationId   String?
+  destination     Destination? @relation(fields: [destinationId], references: [id])
+
+  authorName      String      @default("L'équipe Authentik")
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([slug])
+}
+
+// ------------------------------------------------------
+// 5. ENUMS & AUTH
+// ------------------------------------------------------
 enum TripStatus {
   DRAFT      // En préparation (non visible sur le site)
   PUBLISHED  // En ligne et disponible
@@ -85,8 +128,16 @@ enum TripStatus {
   COMPLETED  // Terminé (Passé)
 }
 
+enum LeadStatus {
+  NEW
+  CONTACTED
+  PROPOSAL
+  CONVERTED
+  LOST
+}
+
 // ------------------------------------------------------
-// 4. UTILISATEURS & AUTH (NexAuth standard)
+// 6. UTILISATEURS & AUTH (NexAuth standard)
 // ------------------------------------------------------
 model User {
   id            String    @id @default(cuid())
@@ -96,6 +147,7 @@ model User {
   image         String?
   role          String    @default("USER")
   
+  // Relations
   accounts      Account[]
   sessions      Session[]
   bookings      Booking[] 
@@ -105,7 +157,7 @@ model User {
 }
 
 // ------------------------------------------------------
-// 5. RÉSERVATIONS, LEADS & AUTH (Le reste de ton schéma)
+// 7. RÉSERVATIONS, LEADS & AUTH (Le reste de ton schéma)
 // ------------------------------------------------------
 model Booking {
   id           Int        @id @default(autoincrement())
@@ -120,6 +172,9 @@ model Booking {
   user         User?      @relation(fields: [userId], references: [id])
 }
 
+// ------------------------------------------------------
+// 8. RÉSERVATIONS, LEADS & AUTH (Le reste de ton schéma)
+// ------------------------------------------------------
 model CustomLead {
   id              String      @id @default(cuid())
   firstName       String
@@ -140,13 +195,6 @@ model CustomLead {
   updatedAt       DateTime    @updatedAt
 }
 
-enum LeadStatus {
-  NEW
-  CONTACTED
-  PROPOSAL
-  CONVERTED
-  LOST
-}
 
 model Account {
   id                 String  @id @default(cuid())
