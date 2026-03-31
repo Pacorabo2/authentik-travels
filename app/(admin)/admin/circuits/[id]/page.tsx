@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { updateCircuit } from "../actions";
 import ProgramEditor from "../_components/ProgramEditor";
-import ItineraryManager from "@/app/components/admin/ItineraryManager";
 
 export default async function EditCircuitPage({
   params,
@@ -17,17 +16,20 @@ export default async function EditCircuitPage({
 
   // 1. Récupération des données en parallèle (Circuit + Liste des pays)
   const [trip, destinations] = await Promise.all([
-    prisma.groupTrip.findUnique({ where: { id: circuitId } }),
-    prisma.destination.findMany({ orderBy: { name: "asc" } }),
+    prisma.circuit.findUnique({
+      where: { id: id }, // Ici, 'id' est un String, ce que Prisma attend
+    }),
+    prisma.destination.findMany({
+      orderBy: { name: "asc" },
+    }),
   ]);
 
-  if (!trip) return notFound();
+  if (!trip) {
+    return <div>Circuit non trouvé</div>;
+  }
 
   // 2. Préparation de l'action avec l'ID (Technique du bind)
   const updateWithId = updateCircuit.bind(null, id);
-
-  // 3. Formatage de la date pour l'input type="date" (format YYYY-MM-DD requis)
-  const formattedDate = trip.startDate.toISOString().split("T")[0];
 
   return (
     <div className="max-w-4xl">
@@ -42,7 +44,6 @@ export default async function EditCircuitPage({
           Modifier : {trip.title}
         </h1>
       </header>
-
       <form
         action={updateWithId}
         className="space-y-8 bg-white p-12 rounded-[3rem] shadow-xl border border-slate-100"
@@ -60,7 +61,6 @@ export default async function EditCircuitPage({
               className="w-full p-5 bg-slate-50 rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-bold text-slate-900"
             />
           </div>
-
           <div className="space-y-3">
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
               Pays de destination
@@ -79,21 +79,8 @@ export default async function EditCircuitPage({
             </select>
           </div>
         </div>
-
         {/* DATE, PRIX & DURÉE */}
         <div className="grid grid-cols-3 gap-10">
-          <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
-              Départ
-            </label>
-            <input
-              name="startDate"
-              type="date"
-              defaultValue={formattedDate}
-              required
-              className="w-full p-5 bg-slate-50 rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-bold"
-            />
-          </div>
           <div className="space-y-3">
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
               Prix de base (€)
@@ -119,23 +106,6 @@ export default async function EditCircuitPage({
             />
           </div>
         </div>
-
-        {/* CAPACITÉ */}
-        <div className="grid grid-cols-2 gap-10">
-          <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
-              Places maximum
-            </label>
-            <input
-              name="maxCapacity"
-              type="number"
-              defaultValue={trip.capacity}
-              required
-              className="w-full p-5 bg-slate-50 rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-bold"
-            />
-          </div>
-        </div>
-
         {/* DESCRIPTION */}
         <div className="space-y-3">
           <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
@@ -150,7 +120,6 @@ export default async function EditCircuitPage({
         </div>
         {/* PROGRAMME JOURNALIER STRUCTURE JSON*/}
         <ProgramEditor initialProgram={trip.program} />
-
         <div className="flex justify-end pt-6 space-x-4">
           <Link
             href="/admin/circuits"

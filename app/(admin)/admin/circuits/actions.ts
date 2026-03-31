@@ -15,12 +15,15 @@ export async function createCircuit(formData: FormData) {
 
   // 1. Extraction dynamique de l'itinéraire (notre composant ItineraryBuilder)
   const itineraryCount = Number(formData.get("itineraryCount") || 0);
+
+  // 2. Créer une boucle pour extraire chaque jour un par un
   const program = [];
 
   for (let i = 0; i < itineraryCount; i++) {
     const dayTitle = formData.get(`day-title-${i}`) as string;
     const dayDesc = formData.get(`day-desc-${i}`) as string;
 
+    // On ne l'ajoute que si le titre ou la description n'est pas vide
     if (dayTitle || dayDesc) {
       program.push({
         day: i + 1,
@@ -29,6 +32,7 @@ export async function createCircuit(formData: FormData) {
       });
     }
   }
+
 
   // 2. Calcul des dates
   const startDate = new Date(startDateStr);
@@ -44,7 +48,7 @@ export async function createCircuit(formData: FormData) {
     .replace(/[^\w-]+/g, "");
 
   // 4. Insertion dans la base
-  await prisma.groupTrip.create({
+  await prisma.circuit.create({
     data: {
       title,
       slug,
@@ -53,22 +57,19 @@ export async function createCircuit(formData: FormData) {
       endDate,
       duration, // N'oublie pas d'ajouter ce champ s'il est dans ton schéma
       capacity: maxCapacity,
-
       // On insère le tableau d'objets construit plus haut
       program: program,
-
       priceBase: price,
       pricePremium: price * 1.2,
       pricePlatinium: price * 1.5,
       depositAmount: price * 0.3,
-
       destinationId: destinationId,
       status: "PLANNED", // Statut par défaut
     },
   });
 
   revalidatePath("/admin/circuits");
-  revalidatePath("/groupTrip");
+  revalidatePath("/circuits");
   redirect("/admin/circuits?success=true");
 }
 
@@ -104,7 +105,7 @@ export async function updateCircuit(id: string, formData: FormData) {
     program = programRaw ? JSON.parse(programRaw) : [];
   }
 
-  await prisma.groupTrip.update({
+  await prisma.circuit.update({
     where: { id: id }, // Utilise l'ID tel quel si c'est un String (CUID/UUID)
     data: {
       title,
@@ -123,13 +124,13 @@ export async function updateCircuit(id: string, formData: FormData) {
   });
 
   revalidatePath("/admin/circuits");
-  revalidatePath(`/groupTrip/${formData.get("slug")}`);
+  revalidatePath(`/circuits/${formData.get("slug")}`);
   redirect("/admin/circuits?success=true");
 }
 
 // --- SUPPRESSION ---
 export async function deleteCircuit(id: string) {
-  await prisma.groupTrip.delete({
+  await prisma.circuit.delete({
     where: { id: id },
   });
 
