@@ -1,0 +1,1 @@
+// Gère le CRUD groupTrips
