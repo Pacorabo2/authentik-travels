@@ -45,6 +45,12 @@ export default async function AdminLayout({
             <span className="mr-3 text-lg">🚀</span> Circuits
           </Link>
           <Link
+            href="/admin/group-trips"
+            className="group flex items-center p-4 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-white transition-all font-bold hover:scale-[1.02]"
+          >
+            <span className="mr-3 text-lg">🕺</span> Voyages de groupes
+          </Link>
+          <Link
             href="/admin/bookings"
             className="group flex items-center p-4 rounded-2xl text-slate-400 hover:bg-slate-800 hover:text-white transition-all font-bold hover:scale-[1.02]"
           >
