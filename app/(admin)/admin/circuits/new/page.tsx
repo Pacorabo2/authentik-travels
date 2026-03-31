@@ -31,7 +31,7 @@ export default async function NewCircuitPage() {
         <div className="grid grid-cols-2 gap-10">
           <div className="space-y-3">
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
-              Nom du voyage
+              Nom du circuit
             </label>
             <input
               name="title"
@@ -86,30 +86,6 @@ export default async function NewCircuitPage() {
               className="w-full p-5 bg-slate-50 rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-bold"
             />
           </div>
-          <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
-              Places max
-            </label>
-            <input
-              name="maxCapacity"
-              type="number"
-              required
-              placeholder="10"
-              className="w-full p-5 bg-slate-50 rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-bold"
-            />
-          </div>
-        </div>
-
-        <div className="space-y-3">
-          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
-            Date de départ
-          </label>
-          <input
-            name="startDate"
-            type="date"
-            required
-            className="w-full p-5 bg-slate-50 rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-bold"
-          />
         </div>
 
         {/* DESCRIPTION COURTE */}

@@ -8,22 +8,17 @@ import { redirect } from "next/navigation";
 export async function createCircuit(formData: FormData) {
   const title = formData.get("title") as string;
   const destinationId = formData.get("destinationId") as string;
-  const startDateStr = formData.get("startDate") as string;
   const duration = Number(formData.get("duration"));
   const price = Number(formData.get("price"));
-  const maxCapacity = Number(formData.get("maxCapacity"));
 
-  // 1. Extraction dynamique de l'itinéraire (notre composant ItineraryBuilder)
+  // 1. Extraction dynamique de l'itinéraire (ItineraryBuilder)
   const itineraryCount = Number(formData.get("itineraryCount") || 0);
-
-  // 2. Créer une boucle pour extraire chaque jour un par un
   const program = [];
 
   for (let i = 0; i < itineraryCount; i++) {
     const dayTitle = formData.get(`day-title-${i}`) as string;
     const dayDesc = formData.get(`day-desc-${i}`) as string;
 
-    // On ne l'ajoute que si le titre ou la description n'est pas vide
     if (dayTitle || dayDesc) {
       program.push({
         day: i + 1,
@@ -33,13 +28,7 @@ export async function createCircuit(formData: FormData) {
     }
   }
 
-
-  // 2. Calcul des dates
-  const startDate = new Date(startDateStr);
-  const endDate = new Date(startDate);
-  endDate.setDate(startDate.getDate() + duration);
-
-  // 3. Génération du slug
+  // 2. Génération du slug
   const slug = title
     .toLowerCase()
     .normalize("NFD")
@@ -47,84 +36,69 @@ export async function createCircuit(formData: FormData) {
     .replace(/ /g, "-")
     .replace(/[^\w-]+/g, "");
 
-  // 4. Insertion dans la base
+  // 3. Insertion dans la base (Uniquement les champs valides pour la table Circuit)
   await prisma.circuit.create({
     data: {
       title,
       slug,
       description: formData.get("description") as string,
-      startDate,
-      endDate,
-      duration, // N'oublie pas d'ajouter ce champ s'il est dans ton schéma
-      capacity: maxCapacity,
-      // On insère le tableau d'objets construit plus haut
+      duration,
       program: program,
       priceBase: price,
       pricePremium: price * 1.2,
       pricePlatinium: price * 1.5,
-      depositAmount: price * 0.3,
       destinationId: destinationId,
-      status: "PLANNED", // Statut par défaut
+      // Note: startDate, endDate, capacity et status sont pour la table GroupTrip, pas Circuit
     },
   });
 
   revalidatePath("/admin/circuits");
-  revalidatePath("/circuits");
+  revalidatePath("/voyages"); // Chemin public
   redirect("/admin/circuits?success=true");
 }
 
 // --- MODIFICATION D'UN CIRCUIT ---
-// (Note: Si tu utilises aussi ItineraryBuilder pour l'édition,
-// il faudra appliquer la même logique de boucle ici)
 export async function updateCircuit(id: string, formData: FormData) {
   const title = formData.get("title") as string;
-  const destinationId = formData.get("destinationId") as string;
-  const startDateStr = formData.get("startDate") as string;
+  const description = formData.get("description") as string;
   const duration = Number(formData.get("duration"));
   const price = Number(formData.get("price"));
+  const destinationId = formData.get("destinationId") as string;
 
-  const startDate = new Date(startDateStr);
-  const endDate = new Date(startDate);
-  endDate.setDate(startDate.getDate() + duration);
+  // 1. Reconstruction du programme
+  const itineraryCount = Number(formData.get("itineraryCount") || 0);
+  const program = [];
 
-  // On essaie de voir si l'itinéraire vient du Builder dynamique
-  const itineraryCount = Number(formData.get("itineraryCount"));
-  let program = [];
+  for (let i = 0; i < itineraryCount; i++) {
+    const dTitle = formData.get(`day-title-${i}`) as string;
+    const dDesc = formData.get(`day-desc-${i}`) as string;
 
-  if (itineraryCount > 0) {
-    for (let i = 0; i < itineraryCount; i++) {
+    if (dTitle || dDesc) {
       program.push({
         day: i + 1,
-        title: formData.get(`day-title-${i}`),
-        description: formData.get(`day-desc-${i}`),
+        title: dTitle || "",
+        description: dDesc || "",
       });
     }
-  } else {
-    // Sinon on garde l'ancien système de secours
-    const programRaw = formData.get("program") as string;
-    program = programRaw ? JSON.parse(programRaw) : [];
   }
 
+  // 2. Mise à jour Prisma
   await prisma.circuit.update({
-    where: { id: id }, // Utilise l'ID tel quel si c'est un String (CUID/UUID)
+    where: { id: id },
     data: {
       title,
-      description: formData.get("description") as string,
-      startDate,
-      endDate,
+      description,
       duration,
-      capacity: Number(formData.get("maxCapacity")),
+      destinationId,
+      program: program,
       priceBase: price,
       pricePremium: price * 1.2,
       pricePlatinium: price * 1.5,
-      depositAmount: price * 0.3,
-      destinationId: destinationId,
-      program: program,
     },
   });
 
   revalidatePath("/admin/circuits");
-  revalidatePath(`/circuits/${formData.get("slug")}`);
+  revalidatePath(`/admin/circuits/${id}`);
   redirect("/admin/circuits?success=true");
 }
 

@@ -64,7 +64,7 @@ export default async function AdminCircuits({
                 Destination
               </th>
               <th className="px-10 py-6 font-bold uppercase text-[10px] tracking-[0.2em] text-slate-400">
-                Prix Public
+                Prix de base
               </th>
               <th className="px-10 py-6 font-bold uppercase text-[10px] tracking-[0.2em] text-slate-400 text-right">
                 Actions
@@ -99,7 +99,7 @@ export default async function AdminCircuits({
                   <td className="px-10 py-6">
                     <div className="flex items-center gap-1 font-black text-slate-900">
                       <Euro size={14} className="text-slate-300" />
-                      {circuit.price}
+                      {circuit.priceBase}
                     </div>
                   </td>
                   <td className="px-10 py-6 text-right space-x-6">
