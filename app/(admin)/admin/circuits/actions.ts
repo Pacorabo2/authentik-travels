@@ -10,6 +10,7 @@ export async function createCircuit(formData: FormData) {
   const destinationId = formData.get("destinationId") as string;
   const duration = Number(formData.get("duration"));
   const price = Number(formData.get("price"));
+  const presentationImg = formData.get("presentationImg") as string;
 
   // 1. Extraction dynamique de l'itinéraire (ItineraryBuilder)
   const itineraryCount = Number(formData.get("itineraryCount") || 0);
@@ -42,6 +43,7 @@ export async function createCircuit(formData: FormData) {
       title,
       slug,
       description: formData.get("description") as string,
+      presentationImg: presentationImg || null,
       duration,
       program: program,
       priceBase: price,
@@ -61,6 +63,7 @@ export async function createCircuit(formData: FormData) {
 export async function updateCircuit(id: string, formData: FormData) {
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
+  const presentationImg = formData.get("presentationImg") as string;
   const duration = Number(formData.get("duration"));
   const price = Number(formData.get("price"));
   const destinationId = formData.get("destinationId") as string;
@@ -88,6 +91,7 @@ export async function updateCircuit(id: string, formData: FormData) {
     data: {
       title,
       description,
+      presentationImg,
       duration,
       destinationId,
       program: program,

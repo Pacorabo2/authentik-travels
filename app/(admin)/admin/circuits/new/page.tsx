@@ -99,6 +99,19 @@ export default async function NewCircuitPage() {
             className="w-full p-6 bg-slate-50 rounded-[1.5rem] border-none focus:ring-2 focus:ring-amber-500 leading-relaxed"
           />
         </div>
+        <div className="space-y-3 p-6 bg-slate-50 rounded-2xl border border-slate-100">
+          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">
+            Image de présentation (URL)
+          </label>
+          <input
+            name="presentationImg"
+            placeholder="https://images.unsplash.com/photo-..."
+            className="w-full p-4 bg-white rounded-xl border-none focus:ring-2 focus:ring-amber-500 font-medium"
+          />
+          <p className="text-[10px] text-slate-400 italic ml-1">
+            Cette image sera affichée sur la carte du circuit dans le catalogue.
+          </p>
+        </div>
 
         {/* AJOUT DE L'ITINÉRAIRE DYNAMIQUE */}
         <ItineraryBuilder />

@@ -118,6 +118,39 @@ export default async function EditCircuitPage({
             className="w-full p-6 bg-slate-50 rounded-[1.5rem] border-none focus:ring-2 focus:ring-amber-500 leading-relaxed text-slate-700"
           />
         </div>
+        {/* BLOC IMAGE DE PRÉSENTATION CORRIGÉ */}
+        <div className="space-y-4 p-6 bg-slate-50 rounded-2xl border border-slate-100 mb-8">
+          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">
+            Image de présentation du catalogue
+          </label>
+
+          {/* APERÇU CONDITIONNEL (Preview) */}
+          {trip.presentationImg ? (
+            <div className="flex gap-4 items-center">
+              <img
+                src={trip.presentationImg}
+                alt={`Aperçu de ${trip.title}`}
+                className="w-40 h-24 object-cover rounded-xl border-2 border-white shadow-md"
+              />
+              <p className="text-xs text-slate-400 italic max-w-[200px]">
+                Image actuellement utilisée. Modifiez l&apos;URL ci-dessous pour
+                la changer.
+              </p>
+            </div>
+          ) : (
+            <div className="w-40 h-24 bg-slate-100 rounded-xl border-2 border-dashed border-slate-200 flex items-center justify-center text-slate-300 text-xs font-bold">
+              Pas d&apos;image
+            </div>
+          )}
+
+          {/* CHAMP DE SAISIE */}
+          <input
+            name="presentationImg"
+            defaultValue={trip.presentationImg || ""}
+            placeholder="https://images.unsplash.com/photo-..."
+            className="w-full p-4 bg-white rounded-xl border-none focus:ring-2 focus:ring-amber-500 font-medium text-sm"
+          />
+        </div>
         {/* PROGRAMME JOURNALIER STRUCTURE JSON*/}
         <ProgramEditor initialProgram={trip.program} />
         <div className="flex justify-end pt-6 space-x-4">
