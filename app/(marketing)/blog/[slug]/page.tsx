@@ -12,7 +12,6 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-// Génération dynamique des Meta-données pour le SEO
 export async function generateMetadata({
   params,
 }: {
@@ -20,7 +19,6 @@ export async function generateMetadata({
 }) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
-
   if (!post) return { title: "Article non trouvé" };
 
   return {
@@ -42,22 +40,19 @@ export default async function BlogPostPage({
   const { slug } = await params;
   const post = await getPostBySlug(slug);
 
-  if (!post) {
-    notFound();
-  }
+  if (!post) notFound();
 
   return (
     <main className="min-h-screen bg-white">
-      {/* 1. HERO SECTION IMAGE & TITRE */}
+      {/* 1. HERO SECTION */}
       <section className="relative h-[70vh] w-full flex items-end pb-20">
         <NextImage
           src={post.mainImage}
           alt={post.title}
           fill
           priority
-          sizes="100vw" // L'image prend toute la largeur de l'écran
+          sizes="100vw"
           className="object-cover brightness-[0.65]"
-          loading="eager"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
 
@@ -90,19 +85,19 @@ export default async function BlogPostPage({
         </div>
       </section>
 
-      {/* 2. CONTENU DE L'ARTICLE */}
+      {/* 2. CORPS DE L'ARTICLE */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-16">
-          {/* COLONNE GAUCHE : INFOS & PARTAGE */}
+          {/* ASIDE (Infos) */}
           <aside className="lg:col-span-3">
             <div className="sticky top-32 space-y-10">
-              <div className="space-y-6">
-                <div className="flex items-center gap-4 text-slate-900">
+              <div className="space-y-6 text-slate-900">
+                <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
                     <User size={20} className="text-slate-400" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">
+                    <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest leading-none mb-1">
                       Rédigé par
                     </p>
                     <p className="font-bold text-sm italic">
@@ -111,7 +106,7 @@ export default async function BlogPostPage({
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-4 pt-6 border-t border-slate-100">
+                <div className="pt-6 border-t border-slate-100 space-y-4">
                   <div className="flex items-center gap-3 text-slate-400">
                     <Calendar size={16} />
                     <span className="text-xs font-bold uppercase tracking-wider">
@@ -139,27 +134,76 @@ export default async function BlogPostPage({
             </div>
           </aside>
 
-          {/* COLONNE DROITE : LE CORPS DE L'ARTICLE */}
+          {/* CONTENU PRINCIPAL */}
           <div className="lg:col-span-8 lg:col-start-5">
-            {/* Résumé / Excerpt */}
             <div className="mb-12">
               <p className="text-2xl font-medium text-slate-600 italic leading-relaxed border-l-4 border-amber-500 pl-8">
                 &quot;{post.excerpt}&quot;
               </p>
             </div>
 
-            {/* Contenu principal stylisé avec prose */}
             <article
               className="prose prose-slate prose-lg max-w-none 
               prose-headings:uppercase prose-headings:italic prose-headings:font-black prose-headings:tracking-tighter prose-headings:text-slate-900
               prose-p:text-slate-600 prose-p:leading-relaxed
               prose-a:text-amber-500 hover:prose-a:text-amber-600 transition-colors
               prose-strong:text-slate-900
-              prose-img:rounded-[2.5rem] prose-img:shadow-2xl"
+              prose-img:rounded-[2.5rem] prose-img:shadow-2xl mb-20"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
 
-            {/* CTA DE FIN D'ARTICLE */}
+            {/* CIRCUITS SUGGÉRÉS (DANS LA COLONNE DE CONTENU) */}
+            {post.destination?.circuits &&
+              post.destination.circuits.length > 0 && (
+                <div className="mt-20 pt-16 border-t border-slate-100">
+                  <h3 className="text-2xl font-black italic uppercase tracking-tighter mb-8">
+                    Prêt à partir au{" "}
+                    <span className="text-amber-500">
+                      {post.destination.name}
+                    </span>{" "}
+                    ?
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {post.destination.circuits.map((circuit, index) => (
+                      <Link
+                        key={circuit.id}
+                        href={`/circuits/${circuit.slug}`}
+                        className="group flex flex-col sm:flex-row items-center gap-6 p-6 bg-slate-50 rounded-[2rem] hover:bg-white hover:shadow-2xl transition-all duration-500 border border-transparent hover:border-slate-100 transform hover:-translate-y-1"
+                        style={{ transitionDelay: `${index * 100}ms` }}
+                      >
+                        <div className="relative w-full sm:w-32 h-32 flex-shrink-0 overflow-hidden rounded-2xl">
+                          <NextImage
+                            src={circuit.presentationImg || "/placeholder.jpg"}
+                            alt={circuit.title}
+                            fill
+                            sizes="200px"
+                            className="object-cover group-hover:scale-110 transition-transform duration-700"
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="w-1 h-1 rounded-full bg-amber-500" />
+                            <p className="text-[10px] font-black uppercase text-amber-600 tracking-widest">
+                              {circuit.duration} jours
+                            </p>
+                          </div>
+                          <h4 className="font-black uppercase italic text-slate-900 group-hover:text-amber-500 transition-colors leading-none mb-2 text-lg">
+                            {circuit.title}
+                          </h4>
+                          <p className="text-xs font-bold text-slate-400">
+                            À partir de{" "}
+                            <span className="text-slate-900">
+                              {circuit.priceBase}€
+                            </span>
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+            {/* CTA FINAL */}
             <div className="mt-20 p-12 bg-slate-900 rounded-[3rem] text-white relative overflow-hidden shadow-2xl group">
               <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
                 <div className="max-w-md">
@@ -174,58 +218,15 @@ export default async function BlogPostPage({
                 </div>
                 <Link
                   href="/sur-mesure"
-                  className="bg-amber-500 text-slate-900 px-10 py-5 rounded-2xl font-black uppercase text-[11px] tracking-widest hover:bg-white hover:scale-105 transition-all flex items-center gap-3 shadow-xl"
+                  className="bg-amber-500 text-slate-900 px-10 py-5 rounded-2xl font-black uppercase text-[11px] tracking-widest hover:bg-white hover:scale-105 transition-all flex items-center gap-3 shadow-xl shrink-0"
                 >
                   Créer mon voyage <ChevronRight size={16} />
                 </Link>
               </div>
-              {/* Cercle décoratif */}
               <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl group-hover:bg-amber-500/20 transition-colors" />
             </div>
           </div>
         </div>
-      </section>
-      {/* SECTION CIRCUITS SUGGÉRÉS */}
-      <section>
-        {post.destination?.circuits && post.destination.circuits.length > 0 && (
-          <div className="mt-20 pt-16 border-t border-slate-100">
-            <h3 className="text-2xl font-black italic uppercase tracking-tighter mb-8">
-              Prêt à partir au{" "}
-              <span className="text-amber-500">{post.destination.name}</span> ?
-            </h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {post.destination.circuits.map((circuit) => (
-                <Link
-                  key={circuit.id}
-                  href={`/circuits/${circuit.slug}`}
-                  className="group flex items-center gap-6 p-6 bg-slate-50 rounded-[2rem] hover:bg-white hover:shadow-2xl transition-all border border-transparent hover:border-slate-100"
-                >
-                  <div className="relative w-32 h-32 flex-shrink-0">
-                    <NextImage
-                      src={circuit.presentationImg || "/placeholder.jpg"}
-                      alt={circuit.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 300px" // 100% sur mobile, 300px sur desktop
-                      className="object-cover rounded-2xl"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-black uppercase text-amber-600 tracking-widest mb-1">
-                      {circuit.duration} jours
-                    </p>
-                    <h4 className="font-black uppercase italic text-slate-900 group-hover:text-amber-500 transition-colors leading-none mb-2">
-                      {circuit.title}
-                    </h4>
-                    <p className="text-xs font-bold text-slate-400">
-                      À partir de {circuit.priceBase}€
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
       </section>
     </main>
   );
