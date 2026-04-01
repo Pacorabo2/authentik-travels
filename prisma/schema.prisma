@@ -53,6 +53,9 @@ model Circuit {
   destinationId   String
   destination     Destination @relation(fields: [destinationId], references: [id])
 
+  // Relation booking
+  bookings        Booking[]
+  
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 }
@@ -159,17 +162,55 @@ model User {
 // ------------------------------------------------------
 // 7. RÉSERVATIONS, LEADS & AUTH (Le reste de ton schéma)
 // ------------------------------------------------------
+
+enum BookingType {
+  GROUP      // Voyage à date fixe (ton focus actuel)
+  INDIVIDUAL // Circuit catalogue acheté tel quel
+  CUSTOM     // Circuit sur-mesure validé après devis
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  REFUNDED
+}
+
 model Booking {
-  id           Int        @id @default(autoincrement())
-  tripId       String
-  groupTrip    GroupTrip  @relation(fields: [tripId], references: [id], onDelete: Cascade)
-  userName     String
-  userEmail    String
-  participants Int        @default(1)
-  status       String     @default("PENDING")
-  createdAt    DateTime   @default(now())
-  userId       String?
-  user         User?      @relation(fields: [userId], references: [id])
+  id              Int           @id @default(autoincrement())
+  type            BookingType   @default(GROUP)
+  
+  // POLYMORPHISME : Liens vers les différents produits
+  groupTripId     String?       // Rempli si c'est un voyage de groupe
+  groupTrip       GroupTrip?    @relation(fields: [groupTripId], references: [id])
+  
+  circuitId       String?       // Rempli si c'est un circuit individuel
+  circuit         Circuit?      @relation(fields: [circuitId], references: [id])
+
+  // INFOS CLIENT (Prénom + Nom séparés comme demandé)
+  firstName       String
+  lastName        String
+  email           String
+  phone           String?
+
+  // DÉTAILS DU SÉJOUR
+  startDate       DateTime
+  endDate         DateTime
+  participants    Int           @default(1)
+  optionType      String        // "BASE", "PREMIUM", "PLATINIUM"
+  
+  // FINANCE
+  totalPrice      Float
+  amountPaid      Float         @default(0)
+  paymentMethod   String        // "STRIPE", "VIREMENT", "CHEQUE"
+  status          BookingStatus @default(PENDING)
+
+  // RELATION AUTH
+  userId          String?
+  user            User?         @relation(fields: [userId], references: [id])
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 }
 
 // ------------------------------------------------------
