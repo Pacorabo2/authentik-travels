@@ -55,7 +55,9 @@ export default async function BlogPostPage({
           alt={post.title}
           fill
           priority
+          sizes="100vw" // L'image prend toute la largeur de l'écran
           className="object-cover brightness-[0.65]"
+          loading="eager"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
 
@@ -142,7 +144,7 @@ export default async function BlogPostPage({
             {/* Résumé / Excerpt */}
             <div className="mb-12">
               <p className="text-2xl font-medium text-slate-600 italic leading-relaxed border-l-4 border-amber-500 pl-8">
-                "{post.excerpt}"
+                &quot;{post.excerpt}&quot;
               </p>
             </div>
 
@@ -182,6 +184,48 @@ export default async function BlogPostPage({
             </div>
           </div>
         </div>
+      </section>
+      {/* SECTION CIRCUITS SUGGÉRÉS */}
+      <section>
+        {post.destination?.circuits && post.destination.circuits.length > 0 && (
+          <div className="mt-20 pt-16 border-t border-slate-100">
+            <h3 className="text-2xl font-black italic uppercase tracking-tighter mb-8">
+              Prêt à partir au{" "}
+              <span className="text-amber-500">{post.destination.name}</span> ?
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {post.destination.circuits.map((circuit) => (
+                <Link
+                  key={circuit.id}
+                  href={`/circuits/${circuit.slug}`}
+                  className="group flex items-center gap-6 p-6 bg-slate-50 rounded-[2rem] hover:bg-white hover:shadow-2xl transition-all border border-transparent hover:border-slate-100"
+                >
+                  <div className="relative w-32 h-32 flex-shrink-0">
+                    <NextImage
+                      src={circuit.presentationImg || "/placeholder.jpg"}
+                      alt={circuit.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 300px" // 100% sur mobile, 300px sur desktop
+                      className="object-cover rounded-2xl"
+                    />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black uppercase text-amber-600 tracking-widest mb-1">
+                      {circuit.duration} jours
+                    </p>
+                    <h4 className="font-black uppercase italic text-slate-900 group-hover:text-amber-500 transition-colors leading-none mb-2">
+                      {circuit.title}
+                    </h4>
+                    <p className="text-xs font-bold text-slate-400">
+                      À partir de {circuit.priceBase}€
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
     </main>
   );
