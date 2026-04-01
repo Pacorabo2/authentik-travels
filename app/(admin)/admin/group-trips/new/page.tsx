@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { createGroupTrip } from "../actions";
-import ItineraryBuilder from "@/app/components/admin/ItineraryBuilder";
+import ItineraryBuilder from "@/components/admin/ItineraryBuilder";
 
 export default async function NewGroupTripPage() {
   // On récupère les destinations pour le menu déroulant

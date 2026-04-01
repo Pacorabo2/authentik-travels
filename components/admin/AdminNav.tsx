@@ -12,6 +12,7 @@ export default function AdminNav() {
     { href: "/admin/circuits", label: "Circuits", icon: "🚀" },
     { href: "/admin/group-trips", label: "Voyages de groupes", icon: "🕺" },
     { href: "/admin/bookings", label: "Réservations", icon: "💳" },
+    { href: "/admin/blog", label: "Blog", icon: "✍️" },
   ];
 
   return (
