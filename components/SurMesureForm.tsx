@@ -1,19 +1,17 @@
-// components/SurMesureForm.tsx
 "use client";
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createLead } from "../app/(marketing)/sur-mesure/action";
 import * as z from "zod";
+import { AlertCircle, CheckCircle2, Loader2, Send } from "lucide-react";
 
-// 1. DÉFINITION DE LA SÉCURITÉ (Schéma Zod)
-// On dicte ici les règles strictes que notre formulaire doit respecter
 const formSchema = z
   .object({
     firstName: z.string().min(2, "Le prénom est requis"),
     lastName: z.string().min(2, "Le nom est requis"),
     email: z.string().email("Email invalide"),
-    // Sécurité téléphone : accepte les formats internationaux, chiffres, espaces, points, parenthèses
     phone: z
       .string()
       .regex(
@@ -23,9 +21,9 @@ const formSchema = z
     destination: z.string().min(2, "Destination requise"),
     startDate: z.string().min(1, "Date de début requise"),
     endDate: z.string().min(1, "Date de fin requise"),
-    partySize: z.coerce.number().min(1),
-    budget: z.string().min(1),
-    experienceType: z.string().min(1),
+    partySize: z.coerce.number().min(1, "Minimum 1 voyageur"),
+    budget: z.string().min(1, "Budget requis"),
+    experienceType: z.string().min(1, "Type d'expérience requis"), // Était manquant dans le HTML
     additionalNotes: z.string().optional(),
   })
   .refine((data) => new Date(data.endDate) > new Date(data.startDate), {
@@ -33,284 +31,263 @@ const formSchema = z
     path: ["endDate"],
   });
 
-// On extrait le type TypeScript à partir de notre schéma Zod
 type FormData = z.infer<typeof formSchema>;
 
 export default function SurMesureForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submittedName, setSubmittedName] = useState(""); // Pour le message de succès
+  const [error, setError] = useState<string | null>(null);
 
-  // 2. CONFIGURATION DE REACT HOOK FORM
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: zodResolver(formSchema), // On connecte Zod à notre formulaire
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      partySize: 1, // Donne une valeur par défaut numérique
+      partySize: 1,
       firstName: "",
       lastName: "",
       email: "",
       destination: "",
-      budget: "",
       experienceType: "",
+      budget: "",
     },
   });
 
-  // 3. FONCTION D'ENVOI (Version Réelle)
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
-    const start = new Date(data.startDate);
-    const end = new Date(data.endDate);
-
-    // Calcul du nombre de jours (Différence en ms / ms par jour)
-    const diffTime = Math.abs(end.getTime() - start.getTime());
-    const dayNumber = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-    const nightNumber = dayNumber - 1;
-
-    const payload = {
-      ...data,
-      dayNumber,
-      nightNumber,
-      startDate: start.toISOString(),
-      endDate: end.toISOString(),
-    };
+    setError(null);
 
     try {
-      const response = await fetch("/api/sur-mesure", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Une erreur est survenue");
+      const result = await createLead(data);
+      if (result.success) {
+        setSubmittedName(data.firstName);
+        setIsSuccess(true);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        setError(result.error || "Une erreur est survenue.");
       }
-
-      // Si tout est OK
-      setIsSuccess(true);
-    } catch (error: any) {
-      console.error("Erreur lors de l'envoi :", error);
-      alert("Désolé, impossible d'envoyer votre demande : " + error.message);
+    } catch (err) {
+      setError("Connexion au serveur impossible.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Affichage en cas de succès
   if (isSuccess) {
     return (
-      <div className="bg-green-50 text-green-800 p-8 rounded-2xl text-center shadow-lg border border-green-100">
-        <div className="text-4xl mb-4">✨</div>
-        <h3 className="text-2xl font-bold mb-2">
-          Demande envoyée avec succès !
+      <div className="bg-emerald-50 border border-emerald-100 p-10 rounded-[2.5rem] text-center shadow-xl animate-in fade-in zoom-in duration-500">
+        <div className="w-20 h-20 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-emerald-200">
+          <CheckCircle2 className="text-white" size={40} />
+        </div>
+        <h3 className="text-3xl font-black italic uppercase tracking-tighter text-emerald-900 mb-4">
+          Demande <span className="text-emerald-600">reçue</span> !
         </h3>
-        <p>
-          Merci pour votre confiance. Nous analysons votre demande et vous
-          recontactons sous 48h avec une première proposition.
+        <p className="text-emerald-700 font-medium leading-relaxed max-w-md mx-auto">
+          Merci {submittedName} ! Nos experts analysent vos envies et vous
+          recontactent sous 48h.
         </p>
       </div>
     );
   }
 
-  // 4. LE DESIGN DU FORMULAIRE
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 space-y-6"
+      className="bg-white p-10 rounded-[3rem] shadow-2xl border border-slate-50 space-y-8 relative overflow-hidden"
     >
-      <h3 className="text-2xl font-bold text-gray-900 mb-6">
-        Parlez-nous de votre projet
-      </h3>
+      {error && (
+        <div className="bg-red-50 border border-red-100 p-4 rounded-2xl flex items-center gap-3 text-red-600 animate-shake">
+          <AlertCircle size={20} />
+          <p className="text-sm font-bold">{error}</p>
+        </div>
+      )}
 
-      {/* Ligne 1 : Nom et Prénom */}
+      <div className="space-y-2">
+        <h3 className="text-3xl font-black italic uppercase tracking-tighter text-slate-900">
+          Votre projet <span className="text-amber-500">sur-mesure</span>
+        </h3>
+        <p className="text-slate-400 text-sm font-medium">
+          Réponse garantie sous 48h par nos experts locaux.
+        </p>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+        <div className="group">
+          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">
             Prénom
           </label>
           <input
             {...register("firstName")}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-            placeholder="Jean"
+            className="w-full px-5 py-4 rounded-2xl border-2 border-slate-50 bg-slate-50 focus:border-amber-500 focus:bg-white transition-all outline-none"
+            placeholder="Ex: Lucas"
           />
           {errors.firstName && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className="text-red-500 text-[10px] font-bold mt-1 ml-2">
               {errors.firstName.message}
             </p>
           )}
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+        <div className="group">
+          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">
             Nom
           </label>
           <input
             {...register("lastName")}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-            placeholder="Dupont"
+            className="w-full px-5 py-4 rounded-2xl border-2 border-slate-50 bg-slate-50 focus:border-amber-500 focus:bg-white transition-all outline-none"
+            placeholder="Ex: Martin"
           />
           {errors.lastName && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className="text-red-500 text-[10px] font-bold mt-1 ml-2">
               {errors.lastName.message}
             </p>
           )}
         </div>
-      </div>
 
-      {/* Ligne 2 : Email et Nombre de personnes */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+        <div className="group">
+          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">
             Email
           </label>
           <input
-            type="email"
             {...register("email")}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-            placeholder="jean.dupont@email.com"
+            type="email"
+            className="w-full px-5 py-4 rounded-2xl border-2 border-slate-50 bg-slate-50 focus:border-amber-500 focus:bg-white transition-all outline-none"
+            placeholder="lucas@exemple.com"
           />
           {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-          )}
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Nombre de voyageurs
-          </label>
-          <input
-            type="number"
-            min="1"
-            {...register("partySize", { valueAsNumber: true })}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-            placeholder="2"
-          />
-          {errors.partySize && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.partySize.message}
+            <p className="text-red-500 text-[10px] font-bold mt-1 ml-2">
+              {errors.email.message}
             </p>
           )}
         </div>
-      </div>
+        <div className="group">
+          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">
+            Téléphone
+          </label>
+          <input
+            {...register("phone")}
+            type="tel"
+            className="w-full px-5 py-4 rounded-2xl border-2 border-slate-50 bg-slate-50 focus:border-amber-500 focus:bg-white transition-all outline-none"
+            placeholder="+33 6..."
+          />
+          {errors.phone && (
+            <p className="text-red-500 text-[10px] font-bold mt-1 ml-2">
+              {errors.phone.message}
+            </p>
+          )}
+        </div>
 
-      {/* Téléphone */}
-      <div className="space-y-1">
-        <label className="text-sm font-medium text-gray-700 mb-1">
-          Téléphone
-        </label>
-        <input
-          {...register("phone")}
-          type="tel"
-          placeholder="+33 6 00 00 00 00"
-          className="w-full p-3 border rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-        />
-        {errors.phone && (
-          <p className="text-red-500 text-xs">{errors.phone.message}</p>
-        )}
-      </div>
+        <div className="md:col-span-2 group">
+          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">
+            Destination
+          </label>
+          <input
+            {...register("destination")}
+            className="w-full px-5 py-4 rounded-2xl border-2 border-slate-50 bg-slate-50 focus:border-amber-500 focus:bg-white transition-all outline-none"
+            placeholder="Cuba, Colombie, Panama..."
+          />
+        </div>
 
-      {/* Dates */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-1">
-          <label className="text-sm font-medium">Départ prévu</label>
+        <div className="group">
+          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">
+            Départ prévu
+          </label>
           <input
             {...register("startDate")}
             type="date"
-            className="w-full p-3 border rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
+            className="w-full px-5 py-4 rounded-2xl border-2 border-slate-50 bg-slate-50 focus:border-amber-500 focus:bg-white transition-all outline-none"
           />
         </div>
-        <div className="space-y-1">
-          <label className="text-sm font-medium">Retour prévu</label>
+        <div className="group">
+          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">
+            Retour prévu
+          </label>
           <input
             {...register("endDate")}
             type="date"
-            className="w-full p-3 border rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
+            className="w-full px-5 py-4 rounded-2xl border-2 border-slate-50 bg-slate-50 focus:border-amber-500 focus:bg-white transition-all outline-none"
           />
           {errors.endDate && (
-            <p className="text-red-500 text-xs">{errors.endDate.message}</p>
+            <p className="text-red-500 text-[10px] font-bold mt-1 ml-2">
+              {errors.endDate.message}
+            </p>
           )}
         </div>
-      </div>
 
-      {/* Ligne 3 : Destination */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Destination souhaitée
-        </label>
-        <input
-          {...register("destination")}
-          className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-          placeholder="Ex: Cuba, Colombie, ou 'Je ne sais pas encore'"
-        />
-        {errors.destination && (
-          <p className="text-red-500 text-sm mt-1">
-            {errors.destination.message}
-          </p>
-        )}
-      </div>
-
-      {/* Ligne 4 : Budget et Type d'expérience */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Budget estimé (par pers.)
+        <div className="group">
+          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">
+            Voyageurs
           </label>
-          <select
-            {...register("budget")}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors bg-white"
-          >
-            <option value="">Sélectionnez un budget</option>
-            <option value="1500-2000">1500€ - 2000€</option>
-            <option value="2000-3000">2000€ - 3000€</option>
-            <option value="3000+">Plus de 3000€</option>
-          </select>
-          {errors.budget && (
-            <p className="text-red-500 text-sm mt-1">{errors.budget.message}</p>
-          )}
+          <input
+            {...register("partySize")}
+            type="number"
+            className="w-full px-5 py-4 rounded-2xl border-2 border-slate-50 bg-slate-50 focus:border-amber-500 focus:bg-white transition-all outline-none"
+          />
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Type d&apos;expérience
+
+        {/* AJOUT DU CHAMP EXPERIENCE TYPE QUI BLOQUAIT TOUT */}
+        <div className="group">
+          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">
+            Type d'expérience
           </label>
           <select
             {...register("experienceType")}
-            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors bg-white"
+            className="w-full px-5 py-4 rounded-2xl border-2 border-slate-50 bg-slate-50 focus:border-amber-500 focus:bg-white transition-all outline-none appearance-none"
           >
-            <option value="">Sélectionnez une envie</option>
-            <option value="Danse et Culture">Immersion Danse & Culture</option>
-            <option value="Aventure et Nature">Aventure & Nature</option>
-            <option value="Détente et Plage">Détente & Plage</option>
-            <option value="Mixte">Un peu de tout !</option>
+            <option value="">Sélectionnez...</option>
+            <option value="Aventure">Aventure & Nature</option>
+            <option value="Culture">Culture & Histoire</option>
+            <option value="Detente">Détente & Plage</option>
           </select>
           {errors.experienceType && (
-            <p className="text-red-500 text-sm mt-1">
+            <p className="text-red-500 text-[10px] font-bold mt-1 ml-2">
               {errors.experienceType.message}
             </p>
           )}
         </div>
+
+        <div className="md:col-span-2 group">
+          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">
+            Budget estimé / pers.
+          </label>
+          <select
+            {...register("budget")}
+            className="w-full px-5 py-4 rounded-2xl border-2 border-slate-50 bg-slate-50 focus:border-amber-500 focus:bg-white transition-all outline-none appearance-none"
+          >
+            <option value="">Sélectionnez...</option>
+            <option value="1500-2000">1500€ - 2000€</option>
+            <option value="2000-3000">2000€ - 3000€</option>
+            <option value="3000+">3000€ et +</option>
+          </select>
+        </div>
       </div>
 
-      {/* Commentaires */}
-      <div className="space-y-1">
-        <label className="text-sm font-medium">Commentaires</label>
+      <div className="group">
+        <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-2">
+          Notes particulières
+        </label>
         <textarea
           {...register("additionalNotes")}
-          placeholder="Détaillez vos envies..."
-          className="w-full p-3 border rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
           rows={4}
+          className="w-full px-5 py-4 rounded-3xl border-2 border-slate-50 bg-slate-50 focus:border-amber-500 focus:bg-white transition-all outline-none"
+          placeholder="Dites-nous tout..."
         />
       </div>
 
-      {/* Bouton de soumission */}
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full bg-gray-900 text-white font-bold text-lg py-4 px-8 rounded-lg hover:bg-black transition-all duration-300 shadow-lg disabled:opacity-70 disabled:cursor-not-allowed mt-4"
+        className="w-full bg-slate-900 text-white font-black uppercase text-xs tracking-[0.3em] py-6 rounded-[2rem] hover:bg-amber-500 hover:text-slate-900 transition-all shadow-xl disabled:opacity-50 flex items-center justify-center gap-3 group"
       >
-        {isSubmitting ? "Envoi en cours..." : "Créer mon voyage"}
+        {isSubmitting ? (
+          <Loader2 className="animate-spin" size={20} />
+        ) : (
+          <>
+            <Send size={16} /> Créer mon voyage
+          </>
+        )}
       </button>
     </form>
   );
