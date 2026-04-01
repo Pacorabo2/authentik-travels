@@ -2,23 +2,25 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import NewLeadsBadge from "./NewLeadsBadge";
 
 export default function AdminNav() {
   const pathname = usePathname();
 
-  // Liste des liens de navigation
+  // Liste des liens de navigation mise à jour
   const navLinks = [
     { href: "/admin/destinations", label: "Destinations", icon: "🌍" },
     { href: "/admin/circuits", label: "Circuits", icon: "🚀" },
     { href: "/admin/group-trips", label: "Voyages de groupes", icon: "🕺" },
     { href: "/admin/bookings", label: "Réservations", icon: "💳" },
     { href: "/admin/blog", label: "Blog", icon: "✍️" },
+    // AJOUT DU NOUVEAU LIEN :
+    { href: "/admin/leads", label: "Demandes Client", icon: "📥" },
   ];
 
   return (
     <nav className="space-y-3 flex-grow">
       {navLinks.map((link) => {
-        // On vérifie si le lien commence par le href (pour garder l'onglet actif en sous-page)
         const isActive = pathname.startsWith(link.href);
 
         return (
@@ -31,7 +33,15 @@ export default function AdminNav() {
                 : "text-slate-400 hover:bg-slate-800 hover:text-white" // Style Repos
             }`}
           >
-            <span className="mr-3 text-lg">{link.icon}</span> {link.label}
+            <span className="mr-3 text-lg">{link.icon}</span>
+            <span className="flex-grow">{link.label}</span>
+
+            {/* AFFICHAGE DU BADGE : Uniquement pour le lien 'leads' */}
+            {link.href === "/admin/leads" && (
+              <div className="ml-2">
+                <NewLeadsBadge />
+              </div>
+            )}
           </Link>
         );
       })}
