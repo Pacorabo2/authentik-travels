@@ -1,4 +1,3 @@
-// Gère le CRUD groupTrips
 "use server";
 
 import prisma from "@/lib/prisma";
@@ -7,92 +6,71 @@ import { redirect } from "next/navigation";
 import { TripStatus } from "@prisma/client";
 
 /**
- * CRÉATION D'UN VOYAGE DE GROUPE
+ * 1. CRÉATION D'UN VOYAGE DE GROUPE
  */
-// --- 1. CRÉATION D'UN VOYAGE DE GROUPE ---
 export async function createGroupTrip(formData: FormData) {
   const title = formData.get("title") as string;
   const priceBase = Number(formData.get("priceBase"));
-  const startDateStr = formData.get("startDate") as string;
-  const duration = Number(formData.get("duration"));
-  const imageUrl = formData.get("imageUrl") as string;
-  const videoUrl = formData.get("videoUrl") as string;
 
-  // Calcul automatique de la date de fin
-  const startDate = new Date(startDateStr);
-  const endDate = new Date(startDate);
-  endDate.setDate(startDate.getDate() + duration);
+  const startDate = new Date(formData.get("startDate") as string);
+  const endDate = new Date(formData.get("endDate") as string);
+  const duration = Math.ceil(
+    (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
+  );
 
-  // Reconstruction du programme (ItineraryBuilder)
-  const itineraryCount = Number(formData.get("itineraryCount") || 0);
-  const program = [];
-  for (let i = 0; i < itineraryCount; i++) {
-    const t = formData.get(`day-title-${i}`) as string;
-    const d = formData.get(`day-desc-${i}`) as string;
-    if (t || d) {
-      program.push({
-        day: i + 1,
-        title: t || "",
-        description: d || "",
-      });
-    }
-  }
-
-  // Génération du slug unique
-  const slug = `${title
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/ /g, "-")
-    .replace(/[^\w-]+/g, "")}-${Date.now()}`;
+  // Récupération propre du JSON via le nouveau ItineraryBuilder
+  const programRaw = formData.get("program") as string;
+  const program = programRaw ? JSON.parse(programRaw) : [];
 
   try {
     await prisma.groupTrip.create({
       data: {
         title,
-        slug,
-        description: (formData.get("description") as string) || "", // Correction de l'erreur "missing description"
+        slug: `${title.toLowerCase().replace(/ /g, "-")}-${Date.now()}`,
+        description: (formData.get("description") as string) || "",
         startDate,
         endDate,
-        duration,
+        duration: duration || 1,
         capacity: Number(formData.get("capacity")),
         priceBase,
-        pricePremium: Number(formData.get("pricePremium")) || priceBase * 1.2,
-        pricePlatinium:
-          Number(formData.get("pricePlatinium")) || priceBase * 1.5,
-        depositAmount: Number(formData.get("depositAmount")) || priceBase * 0.3,
+        // Nouveaux champs de prix explicites
+        pricePremium: formData.get("pricePremium")
+          ? Number(formData.get("pricePremium"))
+          : null,
+        pricePlatinium: formData.get("pricePlatinium")
+          ? Number(formData.get("pricePlatinium"))
+          : null,
+        depositAmount: Number(formData.get("depositAmount")),
         destinationId: formData.get("destinationId") as string,
-        program: program as any,
-        imageUrl: imageUrl || null,
-        videoUrl: videoUrl || null,
-        status: TripStatus.DRAFT, // Correction de l'erreur "Expected TripStatus"
+        program: program,
+        imageUrl: (formData.get("imageUrl") as string) || null,
+        videoUrl: (formData.get("videoUrl") as string) || null,
+        status: TripStatus.DRAFT,
       },
     });
-  } catch (error) {
-    console.error("Erreur Prisma lors de la création :", error);
-    throw new Error("Erreur lors de l'enregistrement du voyage.");
+  } catch (error: any) {
+    console.error("❌ Erreur création:", error.message);
+    throw new Error("Erreur lors de l'enregistrement.");
   }
 
   revalidatePath("/admin/group-trips");
   redirect("/admin/group-trips?success=true");
 }
 
-// --- 2. MODIFICATION D'UN VOYAGE DE GROUPE ---
+/**
+ * 2. MODIFICATION D'UN VOYAGE DE GROUPE (Version 100% JSON)
+ */
 export async function updateGroupTrip(id: string, formData: FormData) {
   const priceBase = Number(formData.get("priceBase"));
   const startDate = new Date(formData.get("startDate") as string);
-  const duration = Number(formData.get("duration"));
-  const endDate = new Date(startDate);
-  endDate.setDate(startDate.getDate() + duration);
+  const endDate = new Date(formData.get("endDate") as string);
+  const duration = Math.ceil(
+    (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
+  );
 
-  const itineraryCount = Number(formData.get("itineraryCount") || 0);
-  const program = [];
-  for (let i = 0; i < itineraryCount; i++) {
-    const t = formData.get(`day-title-${i}`) as string;
-    const d = formData.get(`day-desc-${i}`) as string;
-    if (t || d)
-      program.push({ day: i + 1, title: t || "", description: d || "" });
-  }
+  // On attend UNIQUEMENT le champ 'program' envoyé par l'ItineraryBuilder moderne
+  const programRaw = formData.get("program") as string;
+  const program = programRaw ? JSON.parse(programRaw) : [];
 
   try {
     await prisma.groupTrip.update({
@@ -102,21 +80,25 @@ export async function updateGroupTrip(id: string, formData: FormData) {
         description: formData.get("description") as string,
         startDate,
         endDate,
-        duration,
+        duration: duration || 1,
         capacity: Number(formData.get("capacity")),
         priceBase,
-        pricePremium: Number(formData.get("pricePremium")) || priceBase * 1.2,
-        pricePlatinium:
-          Number(formData.get("pricePlatinium")) || priceBase * 1.5,
+        // Mise à jour des options d'hébergement
+        pricePremium: formData.get("pricePremium")
+          ? Number(formData.get("pricePremium"))
+          : null,
+        pricePlatinium: formData.get("pricePlatinium")
+          ? Number(formData.get("pricePlatinium"))
+          : null,
         depositAmount: Number(formData.get("depositAmount")),
         destinationId: formData.get("destinationId") as string,
-        program: program as any,
-        imageUrl: formData.get("imageUrl") as string,
-        videoUrl: formData.get("videoUrl") as string,
+        program: program,
+        imageUrl: (formData.get("imageUrl") as string) || null,
+        videoUrl: (formData.get("videoUrl") as string) || null,
       },
     });
-  } catch (error) {
-    console.error("Erreur Prisma lors de la mise à jour :", error);
+  } catch (error: any) {
+    console.error("❌ Erreur modification:", error.message);
     throw new Error("Erreur lors de la modification.");
   }
 
@@ -126,20 +108,14 @@ export async function updateGroupTrip(id: string, formData: FormData) {
 }
 
 /**
- * SUPPRESSION D'UN VOYAGE DE GROUPE
+ * 3. SUPPRESSION
  */
 export async function deleteGroupTrip(id: string) {
   try {
-    await prisma.groupTrip.delete({
-      where: { id },
-    });
+    await prisma.groupTrip.delete({ where: { id } });
   } catch (error) {
-    console.error("Erreur lors de la suppression du GroupTrip:", error);
-    throw new Error(
-      "Impossible de supprimer ce voyage (vérifiez s'il y a des réservations liées)",
-    );
+    throw new Error("Impossible de supprimer ce voyage.");
   }
-
   revalidatePath("/admin/group-trips");
   redirect("/admin/group-trips?deleted=true");
 }

@@ -1,10 +1,10 @@
+// app/(admin)/admin/group-trips/new/page.tsx
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { createGroupTrip } from "../actions";
 import ItineraryBuilder from "@/components/admin/ItineraryBuilder";
 
 export default async function NewGroupTripPage() {
-  // On récupère les destinations pour le menu déroulant
   const destinations = await prisma.destination.findMany({
     orderBy: { name: "asc" },
   });
@@ -23,6 +23,7 @@ export default async function NewGroupTripPage() {
         </h1>
       </header>
 
+      {/* Note: On garde l'action directe, ItineraryBuilder s'occupera d'injecter le JSON */}
       <form
         action={createGroupTrip}
         className="space-y-8 bg-white p-12 rounded-[3rem] shadow-xl border border-slate-100"
@@ -31,12 +32,13 @@ export default async function NewGroupTripPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           <div className="space-y-3">
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
-              Nom de l'édition (ex: Salsa Tour 2026)
+              Nom de l&apos;édition
             </label>
             <input
               name="title"
               required
               className="w-full p-5 bg-slate-50 rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-bold text-slate-900"
+              placeholder="Ex: Cuba Salsa Tour 2026"
             />
           </div>
 
@@ -59,8 +61,8 @@ export default async function NewGroupTripPage() {
           </div>
         </div>
 
-        {/* DATES & DURÉE */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        {/* DATES & LOGISTIQUE */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="space-y-3">
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
               Date de départ
@@ -74,19 +76,18 @@ export default async function NewGroupTripPage() {
           </div>
           <div className="space-y-3">
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
-              Durée (jours)
+              Date de retour
             </label>
             <input
-              name="duration"
-              type="number"
+              name="endDate"
+              type="date"
               required
-              placeholder="12"
               className="w-full p-5 bg-slate-50 rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-bold"
             />
           </div>
           <div className="space-y-3">
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
-              Nombre de places
+              Capacité (Places)
             </label>
             <input
               name="capacity"
@@ -98,114 +99,81 @@ export default async function NewGroupTripPage() {
           </div>
         </div>
 
-        {/* SECTION 3 : TARIFICATION (FINANCE) */}
+        {/* TARIFICATION */}
         <div className="p-8 bg-amber-50 rounded-[2rem] border border-amber-100 space-y-6">
-          <h3 className="font-black uppercase text-xs tracking-widest text-amber-600">
-            Tarification & Options Stripe
+          <h3 className="font-black uppercase text-xs tracking-widest text-amber-600 flex items-center gap-2">
+            💰 Tarification & Options d&apos;hébergement
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div className="space-y-3">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
-                Prix de base (€)
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-[9px] font-black uppercase text-slate-400 ml-1 italic">
+                Price Base (Chambre à partager)
               </label>
               <input
                 name="priceBase"
                 type="number"
                 required
+                className="w-full p-4 bg-white rounded-xl border-none focus:ring-2 focus:ring-amber-500 font-bold"
                 placeholder="1500"
-                className="w-full p-5 bg-white rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-bold text-slate-900"
               />
             </div>
-            <div className="space-y-3">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
-                Acompte à la réservation (€)
+            <div className="space-y-2">
+              <label className="text-[9px] font-black uppercase text-slate-400 ml-1 italic">
+                Acompte / Réservation (€)
               </label>
               <input
                 name="depositAmount"
                 type="number"
                 required
+                className="w-full p-4 bg-white rounded-xl border-none focus:ring-2 focus:ring-amber-500 font-bold"
                 placeholder="500"
-                className="w-full p-5 bg-white rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-bold text-slate-900"
               />
             </div>
-            <div className="space-y-3">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
-                Prix Premium Optionnel (€)
+
+            {/* NOUVEAUX CHAMPS */}
+            <div className="space-y-2">
+              <label className="text-[9px] font-black uppercase text-slate-400 ml-1 italic">
+                Price Premium (Chambre Individuelle)
               </label>
               <input
-                name="premiumPrice"
+                name="pricePremium"
                 type="number"
-                required
-                placeholder="500"
-                className="w-full p-5 bg-white rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-bold text-slate-900"
+                className="w-full p-4 bg-white rounded-xl border-none focus:ring-2 focus:ring-amber-500 font-bold"
+                placeholder="1850"
               />
             </div>
-            <div className="space-y-3">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
-                Prix Platinium Optionnel (€)
+            <div className="space-y-2">
+              <label className="text-[9px] font-black uppercase text-slate-400 ml-1 italic">
+                Price Platinium (Surclassé / Suite)
               </label>
               <input
-                name="platinumPrice"
+                name="pricePlatinium"
                 type="number"
-                required
-                placeholder="500"
-                className="w-full p-5 bg-white rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-bold text-slate-900"
+                className="w-full p-4 bg-white rounded-xl border-none focus:ring-2 focus:ring-amber-500 font-bold"
+                placeholder="2200"
               />
             </div>
-          </div>
-        </div>
-        {/* SECTION 4 : DESCRIPTION DU VOYAGE*/}
-        <div className="space-y-3">
-          <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">
-            Description du voyage
-          </label>
-          <textarea
-            name="description"
-            rows={4}
-            className="w-full p-5 bg-slate-50 rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500"
-            placeholder="Présentez ce départ en quelques mots..."
-          />
-        </div>
-        {/* SECTION 5 : CHARGEMENT VIDEO ET IMAGEURL */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100">
-          <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">
-              Image de présentation (URL)
-            </label>
-            <input
-              name="imageUrl"
-              placeholder="https://images.unsplash.com/..."
-              className="w-full p-5 bg-white rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-medium"
-            />
-          </div>
-          <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">
-              Vidéo Hero (URL)
-            </label>
-            <input
-              name="videoUrl"
-              placeholder="Lien YouTube ou MP4..."
-              className="w-full p-5 bg-white rounded-[1.2rem] border-none focus:ring-2 focus:ring-amber-500 font-medium"
-            />
           </div>
         </div>
 
-        {/* SECTION 6 : PROGRAMME DYNAMIQUE */}
-        <hr className="border-slate-100" />
-        <ItineraryBuilder />
+        {/* ITINÉRAIRE DYNAMIQUE */}
+        <div className="pt-6 border-t border-slate-100">
+          <ItineraryBuilder />
+        </div>
 
-        <div className="flex justify-end pt-6 space-x-4">
+        {/* SUBMIT */}
+        <div className="flex justify-end pt-10 border-t border-slate-50 gap-4">
           <Link
             href="/admin/group-trips"
-            className="px-8 py-5 font-bold text-slate-400 hover:text-slate-900 transition-colors"
+            className="px-8 py-5 font-bold text-slate-400 hover:text-slate-900 transition-colors uppercase text-[10px] tracking-widest"
           >
             Annuler
           </Link>
           <button
             type="submit"
-            className="bg-slate-900 text-white px-12 py-5 rounded-[1.5rem] font-black uppercase tracking-widest hover:bg-amber-600 transition-all shadow-xl"
+            className="bg-slate-900 text-amber-500 px-12 py-5 rounded-[1.5rem] font-black uppercase tracking-[0.2em] text-[10px] hover:bg-black transition-all shadow-xl shadow-slate-200"
           >
-            Publier le voyage
+            Publier l'édition
           </button>
         </div>
       </form>
