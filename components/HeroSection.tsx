@@ -1,25 +1,23 @@
 // components/HeroSection.tsx
 import Link from "next/link";
+import { getEmbedVideoUrl } from "@/lib/video-utils";
 
 export default function HeroSection() {
   // C'est ici que tu mettras l'URL de ta vidéo stockée sur Supabase ou AWS
   // Pour l'instant, j'ai mis une vidéo de test libre de droits pour que tu voies le résultat
-  const videoUrl = "/videos/hero-bg.mp4";
+  const videoSrc = getEmbedVideoUrl("https://vimeo.com/688119406?fl=ip&fe=ec");
 
   return (
     // 'relative h-screen' = prend toute la hauteur de l'écran et sert de repère pour les éléments absolus
     <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
       {/* 1. LA VIDÉO EN ARRIÈRE-PLAN */}
-      <video
-        autoPlay // Lance la vidéo toute seule
-        loop // Recommence à l'infini
-        muted // OBLIGATOIRE pour que l'autoPlay fonctionne sur les navigateurs
-        playsInline // OBLIGATOIRE pour que la vidéo ne s'ouvre pas en plein écran sur iPhone
-        className="absolute z-0 w-auto min-w-full min-h-full max-w-none object-cover"
-      >
-        <source src={videoUrl} type="video/mp4" />
-        Votre navigateur ne supporte pas la balise vidéo.
-      </video>
+      <div className="absolute inset-0 pointer-events-none">
+        <iframe
+          src={videoSrc}
+          className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 border-none"
+          allow="autoplay; fullscreen; picture-in-picture"
+        />
+      </div>
 
       {/* 2. L'OVERLAY SOMBRE (Filtre de lisibilité) */}
       {/* 'z-10' le place au-dessus de la vidéo (z-0) mais en dessous du texte (z-20) */}

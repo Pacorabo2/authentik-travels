@@ -15,7 +15,7 @@ async function main() {
       slug: "cuba",
       tagline: "L’île crocodile au rythme de la salsa.",
       heroVideoUrl:
-        "https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/videos/hero-bg.mp4",
+        "@/public/videos/colombie.mp4",
       presentationImg:
         "https://images.unsplash.com/photo-1503192851959-c6da8ac80cff?q=80&w=2000",
       description: `Une terre de contrastes où le temps semble s'être arrêté. 

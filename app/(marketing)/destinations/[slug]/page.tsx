@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { getEmbedVideoUrl } from "@/lib/video-utils";
 
 export default async function DestinationPage({
   params,
@@ -23,22 +24,22 @@ export default async function DestinationPage({
     },
   });
 
-  if (!destination) return notFound();
+  const videoSrc = getEmbedVideoUrl(destination.heroVideoUrl);
 
+  if (!destination) return notFound();
+  console.log("Lien url de la vidéo : " + destination.heroVideoUrl);
   return (
     <main>
       {/* SECTION A : HERO - L'ÉMOTION (Le Pays) */}
       <section className="relative h-[80vh] w-full flex items-center justify-center bg-slate-900">
-        {destination.heroVideoUrl ? (
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover opacity-60"
-          >
-            <source src={destination.heroVideoUrl} type="video/mp4" />
-          </video>
+        {videoSrc ? (
+          <div className="absolute inset-0 pointer-events-none">
+            <iframe
+              src={videoSrc}
+              className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 border-none"
+              allow="autoplay; fullscreen; picture-in-picture"
+            />
+          </div>
         ) : (
           <Image
             src={destination.imageUrl || "/default-country.jpg"}
