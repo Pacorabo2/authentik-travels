@@ -25,9 +25,7 @@ export default async function DestinationsPage() {
           </span>
           <h1 className="text-6xl md:text-8xl font-bold text-white tracking-medium leading-none">
             Nos Destinations
-            <span className="text-amber-500 text-7xl md:text-9xl">
-              .
-            </span>
+            <span className="text-amber-500 text-7xl md:text-9xl">.</span>
           </h1>
         </div>
 
