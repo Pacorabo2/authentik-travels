@@ -52,7 +52,7 @@ export default async function DestinationPage({
           <span className="text-amber-500 font-black uppercase tracking-[0.2em] text-base mb-4 block animate-fade-in">
             Découvrez l&apos;Authentique
           </span>
-          <h1 className="relative z-10 text-8xl font-bold text-white tracking-tighter">
+          <h1 className="relative z-10 text-8xl font-bold text-white tracking-medium">
             {destination.name}
             <span className="text-amber-500 text-7xl md:text-9xl">.</span>
           </h1>
