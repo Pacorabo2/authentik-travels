@@ -37,7 +37,7 @@ export default async function GroupTripsPage() {
           <span className="text-amber-500 font-black uppercase tracking-[0.em] text-base mb-4 block">
             Exprériences Immersives
           </span>
-          <h1 className="text-6xl md:text-8xl font-black text-white italic uppercase tracking-tighter leading-none">
+          <h1 className="text-6xl md:text-8xl font-bold text-white tracking-medium leading-none">
             Nos Voyages
             <span className="text-amber-500">.</span>
           </h1>
@@ -55,7 +55,8 @@ export default async function GroupTripsPage() {
           <p className="text-slate-400 mt-8 max-w-2xl font-medium text-lg leading-relaxed">
             Rejoignez nos départs thématiques accompagnés par nos ambassadeurs.
             <br />
-            Danse, culture et rencontres authentiques en petit comité.
+            Découvrez la culture et faites des rencontres authentiques en petit
+            comité.
           </p>
         </div>
 

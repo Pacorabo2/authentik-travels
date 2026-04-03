@@ -26,8 +26,9 @@ export default function HeroSection() {
       {/* 3. LE CONTENU (Texte et Boutons) */}
       <div className="relative z-20 text-center text-white px-4 flex flex-col items-center">
         {/* Titre Principal */}
-        <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-wide text-balance">
-          Vivez l&apos;Authentique<span className="text-amber-500">.</span>
+        <h1 className="text-6xl md:text-8xl font-bold mb-6 tracking-medium text-balance">
+          Vivez l&apos;Authentique
+          <span className="text-amber-500 md:text-9xl">.</span>
         </h1>
 
         {/* Sous-titre */}
@@ -53,19 +54,6 @@ export default function HeroSection() {
           >
             Voir les voyages
           </Link>
-        </div>
-
-        {/* Preuve Sociale (Social Proof) */}
-        <div className="flex flex-col md:flex-row gap-4 md:gap-8 text-sm md:text-base opacity-90 font-medium">
-          <div className="flex items-center justify-center gap-2">
-            <span>✨</span>
-            <p>Créateurs d&apos;émotions depuis 2017</p>
-          </div>
-          <div className="hidden md:block">•</div>
-          <div className="flex items-center justify-center gap-2">
-            <span>🌎</span>
-            <p>Cuba • Colombie • Rép. Dom. • Costa Rica</p>
-          </div>
         </div>
       </div>
     </section>
