@@ -10,7 +10,7 @@ export default async function DestinationsPage() {
   return (
     <main className="bg-white min-h-screen">
       {/* SECTION A : HERO (Inchangé pour la cohérence) */}
-      <section className="relative h-[90vh] w-full flex items-center justify-center bg-slate-900 overflow-hidden">
+      <section className="relative h-[90vh] -mt-[80px] w-full flex items-center justify-center bg-slate-900 overflow-hidden">
         <Image
           src="https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/_DSC9533.JPG"
           fill
@@ -20,13 +20,13 @@ export default async function DestinationsPage() {
           alt="Destinations Authentik"
         />
         <div className="relative z-10 text-center px-4">
-          <span className="text-amber-500 font-black uppercase tracking-[0.5em] text-xs mb-4 block animate-fade-in">
-            Explorez nos horizons
+          <span className="text-amber-500 font-black uppercase tracking-[0.2em] text-base mb-4 block animate-fade-in">
+            Explorez nos
           </span>
-          <h1 className="text-6xl md:text-8xl font-black text-white italic uppercase tracking-tighter leading-none">
-            Nos <br />
+          <h1 className="text-6xl md:text-8xl font-bold text-white tracking-medium leading-none">
+            Nos Destinations
             <span className="text-amber-500 text-7xl md:text-9xl">
-              Destinations
+              .
             </span>
           </h1>
         </div>

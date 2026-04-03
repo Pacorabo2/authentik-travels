@@ -34,7 +34,7 @@ export default async function GroupTripsPage() {
           alt="Voyages de groupe Authentik"
         />
         <div className="relative z-10 text-center px-4">
-          <span className="text-amber-500 font-black uppercase tracking-[0.em] text-base mb-4 block">
+          <span className="text-amber-500 font-black uppercase tracking-[0.2em] text-base mb-4 block">
             Exprériences Immersives
           </span>
           <h1 className="text-6xl md:text-8xl font-bold text-white tracking-medium leading-none">

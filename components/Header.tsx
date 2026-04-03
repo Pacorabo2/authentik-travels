@@ -66,13 +66,15 @@ export default function Header({
             onMouseEnter={() => setIsDropdownOpen(true)}
             onMouseLeave={() => setIsDropdownOpen(false)}
           >
-            <button className="flex items-center gap-1 hover:text-amber-500 transition-colors outline-none cursor-pointer uppercase">
+            <Link 
+            href="/destinations"
+            className="flex items-center gap-1 hover:text-amber-500 transition-colors outline-none cursor-pointer uppercase">
               Destinations
               <ChevronDown
                 size={14}
                 className={`transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""}`}
               />
-            </button>
+            </Link>
 
             {/* LE PANNEAU (Dropdown) */}
             <div
