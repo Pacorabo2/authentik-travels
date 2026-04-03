@@ -21,13 +21,13 @@ export default function HeroSection() {
 
       {/* 2. L'OVERLAY SOMBRE (Filtre de lisibilité) */}
       {/* 'z-10' le place au-dessus de la vidéo (z-0) mais en dessous du texte (z-20) */}
-      <div className="absolute z-10 w-full h-full bg-black/50"></div>
+      <div className="absolute z-10 w-full h-full bg-black/55"></div>
 
       {/* 3. LE CONTENU (Texte et Boutons) */}
       <div className="relative z-20 text-center text-white px-4 flex flex-col items-center">
         {/* Titre Principal */}
         <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-wide text-balance">
-          Vivez l&apos;Authentique.
+          Vivez l&apos;Authentique<span className="text-amber-500">.</span>
         </h1>
 
         {/* Sous-titre */}

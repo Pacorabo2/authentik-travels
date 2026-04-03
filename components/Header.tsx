@@ -59,7 +59,7 @@ export default function Header({
         </Link>
 
         {/* 2. NAVIGATION DESKTOP */}
-        <nav className="hidden md:flex items-center gap-10 font-black uppercase text-[10px] tracking-[0.2em]">
+        <nav className="hidden md:flex items-center gap-10 font-black uppercase text-[12px] tracking-[0.2em]">
           {/* MENU DÉROULANT DESTINATIONS */}
           <div
             className="relative py-2"
@@ -79,7 +79,7 @@ export default function Header({
               className={`absolute top-full left-0 w-64 bg-white shadow-2xl rounded-[2rem] p-4 mt-2 transition-all duration-300 border border-slate-100
               ${isDropdownOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-4"}`}
             >
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-3">
                 {destinations && destinations.length > 0 ? (
                   destinations.map((dest) => (
                     <Link
