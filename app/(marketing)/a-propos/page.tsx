@@ -2,10 +2,10 @@ import Image from "next/image";
 
 export default function AproposPage() {
   return (
-    <main className="min-h-screen bg-white pt-32 pb-20">
+    <main className="min-h-screen bg-white pt-8 pb-20">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         {/* Section Titre */}
-        <div className="max-w-3xl mb-20">
+        <div className="max-w-3xl mb-6">
           <span className="text-amber-600 font-black uppercase tracking-[0.3em] text-xs mb-4 block">
             L&apos;ADN Authentik
           </span>
@@ -20,21 +20,31 @@ export default function AproposPage() {
         <div className="grid lg:grid-cols-2 gap-16 items-center mb-32">
           <div className="relative aspect-square rounded-[3rem] overflow-hidden shadow-2xl">
             <Image
-              src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?q=80&w=2000"
-              alt="Notre fondateur sur le terrain"
+              src="https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/_DSC3127.JPG"
+              alt="Cubain fumant le cigare"
               fill
               className="object-cover"
             />
           </div>
           <div className="space-y-8 text-lg text-slate-600 leading-relaxed">
             <p className="font-bold text-slate-900 text-2xl">
-              Authentik Travels n&apos;est pas née dans un bureau, mais sur les
-              pistes de danse de La Havane et les sentiers de la Sierra Nevada.
+              Authentik Travels n&apos;est pas née dans un bureau, mais dans les
+              ruelles de la vieille Havane.
             </p>
             <p>
               Depuis 2017, notre mission est simple : briser la vitre qui sépare
-              le touriste du local. Nous croyons que le voyage commence là où
-              les guides papier s&apos;arrêtent.
+              le touriste du local.
+            </p>
+            <p>
+              Nous croyons qu&apos;un vrai voyage commence là où s&apos;arrêtent
+              les cartes touristiques. Que pour comprendre un pays, il faut
+              partager un repas avec ses habitants, se perdre dans ses marchés,
+              s&apos;émerveiller devant ses paysages.
+            </p>
+            <p>
+              Chez Authentik Travels, nous créons des expériences ancrées dans
+              le réel. Chaque voyage est une histoire, écrite par les habitants
+              qui vous partagent leur quotidien.
             </p>
             <p>
               Chaque itinéraire que nous proposons a été testé, dormi, mangé et
