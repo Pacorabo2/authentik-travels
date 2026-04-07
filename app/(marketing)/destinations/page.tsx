@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import Image from "next/image";
+import { renderDescription } from "@/lib/text-utils";
 
 export default async function DestinationsPage() {
   const destinations = await prisma.destination.findMany({
@@ -35,53 +36,48 @@ export default async function DestinationsPage() {
 
       {/* SECTION B : LES SECTIONS PAYS EN DEUX COLONNES */}
       <section className="py-20">
-        <div className="container mx-auto px-6 md:px-20">
-          <div className="space-y-32">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="space-y-48">
             {" "}
-            {/* Grand espace entre les pays */}
+            {/* Espacement massif entre les pays pour l'élégance */}
             {destinations.map((dest, index) => (
               <div
                 key={dest.id}
-                className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center group"
+                className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start group"
               >
-                {/* COLONNE GAUCHE : LA PHOTO */}
-                <div className="relative h-[50vh] md:h-[60vh] lg:h-[70vh] w-full overflow-hidden rounded-[3rem] shadow-2xl transition-all duration-700 hover:-translate-y-2">
+                {/* COLONNE GAUCHE : L'IMAGE STICKY */}
+                <div className="lg:sticky lg:top-32 relative h-[50vh] md:h-[65vh] w-full overflow-hidden rounded-[3.5rem] shadow-2xl transition-all duration-700">
                   <Image
                     src={dest.imageUrl || "/placeholder-country.jpg"}
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover group-hover:scale-110 transition-transform duration-1000"
+                    className="object-cover group-hover:scale-110 transition-transform duration-[2s]"
                     alt={dest.name}
                   />
-                  {/* Petit overlay sombre en bas pour le style */}
-                  <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-900/60 to-transparent" />
                 </div>
 
-                {/* COLONNE DROITE : LE TEXTE */}
+                {/* COLONNE DROITE : LE TEXTE AVEC LE GUIDE JAUNE */}
                 <div className="space-y-8 flex flex-col justify-center">
                   <div className="space-y-3">
-                    {/* Numérotation élégante (01, 02, etc.) */}
-                    <span className="text-amber-500 font-black text-5xl opacity-30 block italic tracking-tighter">
-                      0{index + 1}
-                    </span>
-                    <span className="text-amber-500 font-black uppercase tracking-[0.3em] text-sm block">
+                    <span className="text-amber-600 font-black uppercase tracking-[0.3em] text-[10px] mb-4 block italic">
                       {dest.tagline}
                     </span>
-                    <h2 className="text-6xl md:text-8xl font-black text-slate-900 italic uppercase tracking-tighter leading-none group-hover:text-amber-500 transition-colors">
+                    <h2 className="text-6xl md:text-8xl font-black text-slate-900 tracking-medium leading-none mb-6">
                       {dest.name}
                     </h2>
                   </div>
 
-                  <p className="text-slate-600 text-lg md:text-xl font-medium leading-relaxed max-w-xl">
-                    {dest.description}
-                  </p>
+                  {/* LE TRAIT JAUNE ET LE TEXTE AÉRÉ */}
+                  <div className="border-l-4 border-amber-500 pl-8 py-2 text-slate-600 text-lg md:text-xl font-medium leading-relaxed max-w-2xl">
+                    {renderDescription(dest.description)}
+                  </div>
 
-                  <div className="pt-8">
+                  <div className="pt-12">
                     <Link
                       href={`/destinations/${dest.slug}`}
-                      className="inline-flex items-center gap-6 bg-slate-900 text-white px-10 py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em] hover:bg-amber-500 transition-all duration-300 shadow-xl shadow-slate-200 group/btn"
+                      className="inline-flex items-center gap-6 bg-slate-900 text-white px-12 py-6 rounded-2xl font-black uppercase text-xs tracking-[0.2em] hover:bg-amber-500 transition-all duration-300 shadow-xl shadow-slate-200 group/btn"
                     >
-                      Découvrir cette destination
+                      Explorer {dest.name}
                       <span className="group-hover/btn:translate-x-2 transition-transform">
                         →
                       </span>

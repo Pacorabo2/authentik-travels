@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { getEmbedVideoUrl } from "@/lib/video-utils";
+import { renderDescription } from "@/lib/text-utils";
 
 export default async function DestinationPage({
   params,
@@ -25,17 +26,6 @@ export default async function DestinationPage({
   });
 
   const videoSrc = getEmbedVideoUrl(destination.heroVideoUrl);
-
-  // Fonction pour transformer les sauts de ligne en paragraphes HTML
-  const renderDescription = (text: string) => {
-    return text.split("\n").map((paragraph, index) =>
-      paragraph.trim() ? (
-        <p key={index} className="mb-6 last:mb-0">
-          {paragraph}
-        </p>
-      ) : null,
-    );
-  };
 
   if (!destination) return notFound();
   console.log("Lien url de la vidéo : " + destination.heroVideoUrl);
