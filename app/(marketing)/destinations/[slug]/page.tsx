@@ -26,6 +26,17 @@ export default async function DestinationPage({
 
   const videoSrc = getEmbedVideoUrl(destination.heroVideoUrl);
 
+  // Fonction pour transformer les sauts de ligne en paragraphes HTML
+  const renderDescription = (text: string) => {
+    return text.split("\n").map((paragraph, index) =>
+      paragraph.trim() ? (
+        <p key={index} className="mb-6 last:mb-0">
+          {paragraph}
+        </p>
+      ) : null,
+    );
+  };
+
   if (!destination) return notFound();
   console.log("Lien url de la vidéo : " + destination.heroVideoUrl);
   return (
@@ -60,56 +71,78 @@ export default async function DestinationPage({
       </section>
 
       {/* SECTION B : PRÉSENTATION - L'EXPERTISE PAYS */}
-      <section className="container mx-auto py-24 px-6">
-        <div className="flex flex-col md:flex-row gap-16 items-center">
-          <div className="w-full md:w-1/3 relative h-[500px] rounded-[3rem] overflow-hidden shadow-2xl">
-            <Image
-              src={destination.imageUrl || "/placeholder.jpg"}
-              fill
-              className="object-cover"
-              alt={`Découvrir ${destination.name}`}
-            />
-          </div>
-          <div className="w-full md:w-2/3 space-y-6">
-            <span className="text-amber-500 font-black uppercase tracking-[0.3em] text-sm">
-              L&apos;Esprit Authentik
-            </span>
-            <h2 className="text-5xl font-bold text-slate-900 leading-tight">
-              {destination.tagline}
-            </h2>
-            <p className="text-xl text-slate-600 leading-relaxed">
-              {destination.description}
-            </p>
+      <section className="container mx-auto py-50 px-6">
+        <div className="container mx-auto max-w-7xl">
+          <div className="flex flex-col lg:flex-row gap-20 items-start">
+            {/* Image de présentation */}
+            <div className="w-full lg:w-1/3 sticky top-32">
+              <div className="relative h-[600px] rounded-[3.5rem] overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-700">
+                <Image
+                  src={destination.imageUrl || "/placeholder.jpg"}
+                  fill
+                  className="object-cover"
+                  alt={`Vibration ${destination.name}`}
+                />
+              </div>
+            </div>
 
-            {/* CTA Vers les deux options de voyage classique */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-12">
-              <div className="p-8 bg-slate-50 border border-slate-100 rounded-[2rem]">
-                <h3 className="text-2xl font-bold italic text-slate-900">
-                  Circuits Classiques
-                </h3>
-                <p className="mt-4 text-slate-500 mb-6">
-                  Des itinéraires optimisés pour découvrir les essentiels de{" "}
-                  {destination.name} en toute liberté.
-                </p>
+            {/* Texte de description */}
+            <div className="w-full lg:w-2/3">
+              <div className="mb-12">
+                <span className="text-amber-500 font-black uppercase tracking-[0.3em] text-xs mb-4 block italic">
+                  L&apos;Esprit Authentik
+                </span>
+                <h2 className="text-5xl md:text-6xl font-black text-slate-900 leading-[0.9] tracking-medium">
+                  {destination.tagline}
+                </h2>
+              </div>
+
+              {/* Conteneur de la description aérée */}
+              <div className="first-letter:text-5xl first-letter:font-black first-letter:mr-3 first-letter:float-left text-xl text-slate-600 leading-relaxed font-medium mb-12 border-l-4 border-amber-500 pl-8 py-2">
+                {renderDescription(destination.description)}
+              </div>
+
+              {/* CTAs */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-16">
+                <div className="p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-2xl font-black italic text-slate-900 uppercase">
+                      Liberté Totale
+                    </h3>
+                    <p className="mt-4 text-slate-500 text-lg">
+                      Des itinéraires classiques optimisés, personnalisables
+                      selon vos envies.
+                    </p>
+                  </div>
+                  <Link
+                    href="#inspirations"
+                    className="mt-8 inline-block text-[10px] font-black uppercase tracking-widest text-amber-600 hover:text-slate-900 transition-colors"
+                  >
+                    Explorer les circuits ↓
+                  </Link>
+                </div>
+
                 <Link
-                  href="#inspirations"
-                  className="text-sm font-black uppercase tracking-widest text-amber-600 hover:text-slate-900 transition-colors"
+                  href={`/sur-mesure?country=${destination.slug}`}
+                  className="p-10 bg-slate-900 text-white rounded-[2.5rem] hover:bg-amber-600 transition-all group relative overflow-hidden"
                 >
-                  Voir nos exemples ↓
+                  <h3 className="text-2xl font-black italic uppercase relative z-10">
+                    Sur-Mesure
+                  </h3>
+                  <p className="mt-4 text-slate-300 group-hover:text-white text-lg relative z-10">
+                    Laissez nos experts locaux dessiner votre aventure brute.
+                  </p>
+                  <div className="absolute -bottom-4 -right-4 opacity-10 group-hover:scale-125 transition-transform">
+                    <Image
+                      src="/logo-white.svg"
+                      width={150}
+                      height={150}
+                      alt=""
+                      className="invert"
+                    />
+                  </div>
                 </Link>
               </div>
-              <Link
-                href={`/sur-mesure?country=${destination.slug}`}
-                className="p-8 bg-slate-900 text-white rounded-[2rem] hover:bg-amber-500 transition-all group"
-              >
-                <h3 className="text-2xl font-bold italic">
-                  {destination.name} Sur-Mesure
-                </h3>
-                <p className="mt-4 text-slate-300 group-hover:text-white">
-                  Créez votre propre aventure 100% personnalisée avec nos
-                  experts locaux.
-                </p>
-              </Link>
             </div>
           </div>
         </div>
