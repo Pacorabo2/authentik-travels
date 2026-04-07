@@ -38,7 +38,7 @@ export default async function GroupTripsPage() {
             Exprériences Immersives
           </span>
           <h1 className="text-6xl md:text-8xl font-bold text-white tracking-medium leading-none">
-            Nos Voyages
+            Nos voyages
             <span className="text-amber-500">.</span>
           </h1>
         </div>

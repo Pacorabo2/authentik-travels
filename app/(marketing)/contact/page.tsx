@@ -2,8 +2,8 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen bg-white pt-40 pb-20 px-6">
       <div className="max-w-4xl mx-auto text-center">
-        <h1 className="text-6xl font-black italic tracking-tighter mb-8">
-          NOUS CONTACTER<span className="text-amber-500">.</span>
+        <h1 className="text-6xl font-bold tracking-medium text-slate-900 leading-none">
+          Nous contacter<span className="text-amber-600">.</span>
         </h1>
         <div className="grid md:grid-cols-2 gap-12 mt-16">
           <div className="p-10 rounded-[2.5rem] bg-slate-50 text-left">

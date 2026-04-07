@@ -21,10 +21,10 @@ export default async function DestinationsPage() {
         />
         <div className="relative z-10 text-center px-4">
           <span className="text-amber-500 font-black uppercase tracking-[0.2em] text-base mb-4 block animate-fade-in">
-            Explorez nos
+            Explorez
           </span>
           <h1 className="text-6xl md:text-8xl font-bold text-white tracking-medium leading-none">
-            Nos Destinations
+            Nos destinations
             <span className="text-amber-500 text-7xl md:text-9xl">.</span>
           </h1>
         </div>
