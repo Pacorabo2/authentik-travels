@@ -66,9 +66,10 @@ export default function Header({
             onMouseEnter={() => setIsDropdownOpen(true)}
             onMouseLeave={() => setIsDropdownOpen(false)}
           >
-            <Link 
-            href="/destinations"
-            className="flex items-center gap-1 hover:text-amber-500 transition-colors outline-none cursor-pointer uppercase">
+            <Link
+              href="/destinations"
+              className="flex items-center gap-1 hover:text-amber-500 transition-colors outline-none cursor-pointer uppercase"
+            >
               Destinations
               <ChevronDown
                 size={14}
@@ -108,6 +109,12 @@ export default function Header({
             className="hover:text-amber-500 transition-colors"
           >
             Nos Voyages
+          </Link>
+          <Link
+            href="/ambassador"
+            className="hover:text-amber-500 transition-colors"
+          >
+            Devenir Ambassadeur
           </Link>
           <Link
             href="/a-propos"

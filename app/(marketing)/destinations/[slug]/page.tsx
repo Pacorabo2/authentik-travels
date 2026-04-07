@@ -25,6 +25,11 @@ export default async function DestinationPage({
     },
   });
 
+  // CRITIQUE : On vérifie l'existence ICI
+  if (!destination) {
+    notFound();
+  }
+
   const videoSrc = getEmbedVideoUrl(destination.heroVideoUrl);
 
   if (!destination) return notFound();
