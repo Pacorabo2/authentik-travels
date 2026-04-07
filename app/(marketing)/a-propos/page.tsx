@@ -9,10 +9,10 @@ export default function AproposPage() {
           <span className="text-amber-600 font-black uppercase tracking-[0.3em] text-xs mb-4 block">
             L&apos;ADN Authentik
           </span>
-          <h1 className="text-5xl md:text-7xl font-black italic tracking-tighter text-slate-900 leading-[0.9]">
-            L&apos;HISTOIRE D&apos;UNE
+          <h1 className="text-6xl md:text-7xl font-bold tracking-medium text-slate-900 leading-none">
+            L&apos;histoire d&apos;une
             <br />
-            PASSION BRUTE<span className="text-amber-500">.</span>
+            passion brute<span className="text-amber-500">.</span>
           </h1>
         </div>
 
