@@ -42,12 +42,13 @@ export default function StorytellingSection() {
           <div className="space-y-6 text-lg text-gray-600 mb-8">
             <p>
               Depuis 2017, Authentik Travels repousse les limites du tourisme
-              classique. Nous sommes nés d&apos;une passion pour l&apos;Amérique
-              Latine, sa musique vibrante et ses cultures chaleureuses.
+              classique. Nous sommes nés d&apos;une{" "}
+              <strong>passion pour l&apos;Amérique Latine</strong>, sa musique,
+              son peuple, sa culture.
             </p>
             <p>
-              Que vous partiez perfectionner vos pas de salsa à La Havane avec
-              nos professeurs partenaires, ou que vous nous confiiez la création
+              Que vous partiez perfectionner vos pas de salsa à Cuba avec
+              nos professeurs partenaires, ou que vous nous confiez la création
               de votre itinéraire sur mesure au Costa Rica, notre promesse reste
               la même :{" "}
               <strong>vous faire vivre le pays de l&apos;intérieur</strong>.
