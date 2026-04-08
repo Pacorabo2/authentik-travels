@@ -3,14 +3,14 @@ import SurMesureForm from "@/components/SurMesureForm";
 
 export default function SurMesurePage() {
   return (
-    <div className="min-h-screen bg-gray-50 pt-24 pb-20">
+    <div className="min-h-screen -mt-[80px] bg-gray-50 pt-24 pb-20">
       {/* 1. HERO SECTION DE LA PAGE */}
       <div className="max-w-7xl mx-auto px-4 md:px-8 mb-16 text-center">
         <span className="text-amber-600 font-bold tracking-wider uppercase text-sm mb-4 block">
           Notre Expertise Historique
         </span>
-        <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 text-balance">
-          Votre aventure, <br /> dessinée pour vous.
+        <h1 className="text-6xl md:text-8xl font-bold mb-6 tracking-medium text-balance">
+          Votre aventure, <br /> sur mesure<span className="text-amber-500 ">.</span>
         </h1>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto text-balance">
           Loin des circuits touristiques classiques, nous créons avec vous un
@@ -87,7 +87,7 @@ export default function SurMesurePage() {
             </h4>
             <p className="text-amber-800 text-sm">
               Authentik Travels bénéficie d&apos;un réseau de partenaires locaux
-              de confiance (guides, chauffeurs, professeurs de danse) construit
+              de confiance (logements, guides, chauffeurs, professeurs de danse) construit
               méticuleusement depuis 2017.
             </p>
           </div>
