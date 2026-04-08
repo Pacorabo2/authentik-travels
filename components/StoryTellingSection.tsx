@@ -32,9 +32,9 @@ export default function StorytellingSection() {
 
           {/* Titre principal avec un mot en dégradé pour le côté Premium */}
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-            Plus qu&apos;un voyage, <br />
+            Plus qu&apos;un voyage, <br /> une rencontre{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-400">
-              une rencontre authentique.
+              authentique.
             </span>
           </h2>
 
@@ -47,9 +47,8 @@ export default function StorytellingSection() {
               son peuple, sa culture.
             </p>
             <p>
-              Que vous partiez perfectionner vos pas de salsa à Cuba avec
-              nos professeurs partenaires, ou que vous nous confiez la création
-              de votre itinéraire sur mesure au Costa Rica, notre promesse reste
+              Vous voulez vivre un voyage qui vous transforme ? Connaître les coutumes locales en étant accompagné par un local désireux de partager ses traditions ? <br />
+              Notre promesse reste
               la même :{" "}
               <strong>vous faire vivre le pays de l&apos;intérieur</strong>.
             </p>

@@ -11,9 +11,9 @@ export default function DoubleOfferSection() {
             Deux façons de vivre l&apos;Authentik
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Que vous préfériez l&apos;énergie d&apos;un groupe ou
-            l&apos;exclusivité d&apos;un voyage pensé juste pour vous, nous
-            avons l&apos;expérience qu&apos;il vous faut.
+            Que vous cherchiez la force du collectif ou l&apos;intimité
+            d&apos;un parcours sur-mesure, nous transformons votre voyage en une
+            immersion profonde au coeur des cultures d&apos;Amérique Latine.
           </p>
         </div>
 
@@ -43,13 +43,15 @@ export default function DoubleOfferSection() {
                 Immersion & Danse
               </span>
               <h3 className="text-3xl font-bold mb-3">Voyages de Groupe</h3>
-              <p className="text-gray-200 mb-6 line-clamp-2">
-                Rejoignez d&apos;autres passionnés. Cours de danse, excursions
-                culturelles et soirées authentiques à Cuba, en Colombie et plus
-                encore.
+              <p className="text-gray-200 mb-6">
+                Rejoignez d&apos;autres passionnés. <br />
+                Une immersion guidée par nos ambassadeurs où la danse,
+                l&apos;art et les rencontres locales deviennent votre quotidien.{" "}
+                <br />
+                Bienvenue dans l&apos;Amérique Latine des initiés.
               </p>
               <span className="inline-block bg-white text-black font-semibold py-3 px-6 rounded-full transition-colors group-hover:bg-amber-500 group-hover:text-white">
-                Découvrir les départs
+                Rejoindre l&apos;aventure
               </span>
             </div>
           </Link>
@@ -75,12 +77,14 @@ export default function DoubleOfferSection() {
                 100% Personnalisé
               </span>
               <h3 className="text-3xl font-bold mb-3">Voyages Sur-Mesure</h3>
-              <p className="text-gray-200 mb-6 line-clamp-2">
-                Notre expertise historique. Confiez-nous vos envies, votre
-                budget et vos dates, nous créons l&apos;itinéraire de vos rêves.
+              <p className="text-gray-200 mb-6">
+                L’expertise de nos racines. <br />
+                Confiez-nous vos envies et vos dates : <br />
+                nous dessinons un itinéraire hors-piste, taillé sur mesure pour
+                votre curiosité.
               </p>
               <span className="inline-block bg-white text-black font-semibold py-3 px-6 rounded-full transition-colors group-hover:bg-amber-500 group-hover:text-white">
-                Créer mon itinéraire
+                Tracer mon itinéraire
               </span>
             </div>
           </Link>

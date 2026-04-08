@@ -33,8 +33,8 @@ export default function HeroSection() {
 
         {/* Sous-titre */}
         <p className="text-xl md:text-2xl mb-10 max-w-2xl font-light text-balance">
-          Plongez au cœur de la culture par la danse ou créez votre aventure sur
-          mesure en Amérique Latine.
+          L&apos;Amérique Latine dans son état brut. <br />
+          Entre héritage sacré et passion vibrante.
         </p>
 
         {/* Double Call-to-Action */}
@@ -52,7 +52,7 @@ export default function HeroSection() {
             href="/groupTrip"
             className="bg-transparent border-2 border-white hover:bg-white hover:text-black text-white font-semibold py-4 px-8 rounded-full transition-all duration-300"
           >
-            Voir les voyages
+            Rejoindre un voyage
           </Link>
         </div>
       </div>
