@@ -46,15 +46,15 @@ export default async function GroupTripDetailPage({
       <section className="container mx-auto py-20 px-6 grid grid-cols-1 lg:grid-cols-3 gap-16">
         <div className="lg:col-span-2 space-y-8">
           <div className="flex gap-4 items-center">
-            <div className="bg-amber-500 text-white px-4 py-1 rounded-full text-[10px] font-black uppercase">
+            <div className="bg-amber-500 text-white px-4 py-1 rounded-full text-[12px] font-black uppercase">
               {trip.destination.name}
             </div>
-            <div className="text-slate-400 font-bold text-sm italic">
+            <div className="text-slate-400 font-bold text-2xl italic">
               Du {new Date(trip.startDate).toLocaleDateString()} au{" "}
               {new Date(trip.endDate).toLocaleDateString()}
             </div>
           </div>
-          <p className="text-2xl text-slate-700 leading-relaxed font-medium italic decoration-amber-500 underline-offset-8">
+          <p className="text-2xl text-slate-700 leading-relaxed font-medium italic whitespace-pre-line leading-relaxed space-y-6">
             {trip.description}
           </p>
 
