@@ -27,7 +27,7 @@ export default async function EditGroupTripPage({
     ? new Date(trip.endDate).toISOString().split("T")[0]
     : "";
 
-  // On prépare l'action avec l'ID déjà injecté (plus propre que le hidden input)
+  // On prépare l'action avec l'ID déjà injecté
   const updateTripWithId = updateGroupTrip.bind(null, trip.id);
 
   return (
@@ -46,11 +46,6 @@ export default async function EditGroupTripPage({
           <p className="text-slate-400 text-[10px] font-mono uppercase tracking-widest bg-slate-100 px-2 py-1 rounded">
             ID: {trip.id}
           </p>
-          <span
-            className={`text-[10px] font-black px-2 py-1 rounded uppercase tracking-widest ${trip.status === "PUBLISHED" ? "bg-emerald-100 text-emerald-600" : "bg-amber-100 text-amber-600"}`}
-          >
-            Statut: {trip.status}
-          </span>
         </div>
       </header>
 
@@ -58,6 +53,44 @@ export default async function EditGroupTripPage({
         action={updateTripWithId}
         className="space-y-8 bg-white p-12 rounded-[3rem] shadow-xl border border-slate-100"
       >
+        {/* SECTION 0 : STATUT DU VOYAGE (NOUVEAU) */}
+        <div
+          className={`p-8 rounded-[2rem] border-2 transition-all ${
+            trip.status === "PUBLISHED"
+              ? "border-emerald-100 bg-emerald-50/30"
+              : trip.status === "FULL"
+                ? "border-slate-200 bg-slate-50 opacity-75"
+                : trip.status === "CANCELLED"
+                  ? "border-red-100 bg-red-50/30"
+                  : trip.status === "COMPLETED"
+                    ? "border-blue-100 bg-blue-50/30"
+                    : "border-amber-100 bg-amber-50/30" // Cas DRAFT
+          }`}
+        >
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+              <h3 className="font-black uppercase text-[10px] tracking-[0.2em] text-slate-900 mb-1">
+                État de visibilité
+              </h3>
+              <p className="text-slate-500 text-xs font-medium">
+                Définissez si ce voyage est visible par vos clients ou s'il est
+                complet.
+              </p>
+            </div>
+            <select
+              name="status"
+              defaultValue={trip.status}
+              className="p-4 bg-white rounded-xl border-none ring-1 ring-slate-200 focus:ring-2 focus:ring-amber-500 font-black uppercase text-xs tracking-widest shadow-sm min-w-[200px]"
+            >
+              <option value="DRAFT">🟠 Brouillon (Caché)</option>
+              <option value="PUBLISHED">🟢 Publié (Visible)</option>
+              <option value="FULL">⚫ Complet (Affiché "Complet")</option>
+              <option value="CANCELLED">🔴 CANCELLED - Annulé</option>
+              <option value="COMPLETED">🔵 COMPLETED - Terminé / Passé</option>
+            </select>
+          </div>
+        </div>
+
         {/* SECTION 1 : INFOS GÉNÉRALES */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           <div className="space-y-3">
@@ -161,6 +194,7 @@ export default async function EditGroupTripPage({
                 className="w-full p-4 bg-slate-800 rounded-xl border-none focus:ring-2 focus:ring-amber-500 font-bold text-white shadow-inner"
               />
             </div>
+            {/* Les autres prix... */}
             <div className="space-y-2">
               <label className="text-[9px] font-black uppercase text-slate-500 ml-1">
                 Price Premium (Individuelle)
@@ -222,7 +256,7 @@ export default async function EditGroupTripPage({
           />
         </div>
 
-        {/* SECTION 5 : ITINÉRAIRE (NOUVELLE LOGIQUE) */}
+        {/* SECTION 5 : ITINÉRAIRE */}
         <div className="pt-10 border-t border-slate-100">
           <ItineraryBuilder initialDays={trip.program} />
         </div>
