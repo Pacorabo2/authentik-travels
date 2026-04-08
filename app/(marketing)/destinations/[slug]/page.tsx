@@ -55,7 +55,7 @@ export default async function DestinationPage({
           />
         )}
         <div className="absolute z-10 w-full h-full bg-black/45"></div>
-        
+
         <div className="relative z-10 text-center px-4">
           <span className="text-amber-500 font-black uppercase tracking-[0.2em] text-base mb-4 block animate-fade-in">
             Découvrez l&apos;Authentique
@@ -78,6 +78,9 @@ export default async function DestinationPage({
                 <Image
                   src={destination.imageUrl || "/placeholder.jpg"}
                   fill
+                  // Ici l'image fait environ 1/3 de la largeur sur desktop (lg:w-1/3)
+                  sizes="(max-width: 1024px) 100vw, 33vw"
+                  priority
                   className="object-cover"
                   alt={`Vibration ${destination.name}`}
                 />
@@ -130,15 +133,6 @@ export default async function DestinationPage({
                   <p className="mt-4 text-slate-300 group-hover:text-white text-lg relative z-10">
                     Laissez nos experts locaux dessiner votre aventure brute.
                   </p>
-                  <div className="absolute -bottom-4 -right-4 opacity-10 group-hover:scale-125 transition-transform">
-                    <Image
-                      src="/logo-white.svg"
-                      width={150}
-                      height={150}
-                      alt=""
-                      className="invert"
-                    />
-                  </div>
                 </Link>
               </div>
             </div>
@@ -174,8 +168,9 @@ export default async function DestinationPage({
                         circuit.presentationImg || "/placeholder-circuit.jpg"
                       }
                       fill
-                      className="object-cover"
+                      className="object-cover group-hover:scale-110 transition-transform duration-700"
                       alt={circuit.title}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   </div>
                   <div className="p-8 flex-grow flex flex-col">

@@ -54,7 +54,7 @@ export default async function GroupTripDetailPage({
               {new Date(trip.endDate).toLocaleDateString()}
             </div>
           </div>
-          <p className="text-2xl text-slate-700 leading-relaxed font-medium italic underline decoration-amber-500 underline-offset-8">
+          <p className="text-2xl text-slate-700 leading-relaxed font-medium italic decoration-amber-500 underline-offset-8">
             {trip.description}
           </p>
 

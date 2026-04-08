@@ -95,7 +95,7 @@ export default async function EditGroupTripPage({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           <div className="space-y-3">
             <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">
-              Nom de l'édition
+              Nom de l&apos;édition
             </label>
             <input
               name="title"

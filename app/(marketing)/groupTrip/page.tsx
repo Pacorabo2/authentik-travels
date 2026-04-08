@@ -10,8 +10,6 @@ export default async function GroupTripsPage() {
     orderBy: { startDate: "asc" },
   });
 
-  console.log("groupTrips", groupTrips);
-
   // Fonction utilitaire pour dynamiser la couleur des pastilles par pays
   const getCountryColor = (countryName: string) => {
     const colors: { [key: string]: string } = {

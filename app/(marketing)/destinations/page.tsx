@@ -46,15 +46,18 @@ export default async function DestinationsPage() {
                 key={dest.id}
                 className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start group"
               >
-                {/* COLONNE GAUCHE : L'IMAGE STICKY */}
-                <div className="lg:sticky lg:top-32 relative h-[50vh] md:h-[65vh] w-full overflow-hidden rounded-[3.5rem] shadow-2xl transition-all duration-700">
-                  <Image
-                    src={dest.imageUrl || "/placeholder-country.jpg"}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover group-hover:scale-110 transition-transform duration-[2s]"
-                    alt={dest.name}
-                  />
+                {/* COLONNE GAUCHE : LE CONTENEUR STICKY */}
+                <div className="lg:sticky lg:top-32 relative h-[50vh] h-fit md:h-[65vh] w-full overflow-hidden rounded-[3.5rem] shadow-2xl transition-all duration-700">
+                  {/* ENVELOPPE RELATIVE POUR L'IMAGE*/}
+                  <div className="relative h-[50vh] md:h-[65vh] w-full overflow-hidden rounded-[3.5rem] shadow-2xl">
+                    <Image
+                      src={dest.imageUrl || "/placeholder-country.jpg"}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="object-cover group-hover:scale-110 transition-transform duration-[2s]"
+                      alt={dest.name}
+                    />
+                  </div>
                 </div>
 
                 {/* COLONNE DROITE : LE TEXTE AVEC LE GUIDE JAUNE */}
