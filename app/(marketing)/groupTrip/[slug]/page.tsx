@@ -23,21 +23,23 @@ export default async function GroupTripDetailPage({
   return (
     <main>
       {/* HERO SECTION */}
-      <section className="relative h-[80vh] bg-slate-900 flex items-center justify-center">
+      <section className="relative h-[100vh] -mt-[80px] bg-slate-900 flex items-center justify-center">
         <Image
           src={trip.destination.imageUrl || "/default.jpg"}
           fill
           className="object-cover opacity-50"
           alt={trip.title}
         />
+        <div className="absolute z-10 w-full h-full bg-black/45"></div>
         <div className="relative z-10 text-center px-4">
           <span className="text-amber-500 font-black uppercase tracking-[0.4em] text-sm mb-4 block">
             Voyage de Groupe Thématique
           </span>
-          <h1 className="text-6xl md:text-8xl font-black text-white italic uppercase tracking-tighter leading-none">
-            {trip.title}
+          <h1 className="text-6xl md:text-8xl font-bold text-white tracking-medium leading-none">
+            {trip.title} <span className="text-amber-500">.</span>
           </h1>
         </div>
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
       </section>
 
       {/* INFOS CLÉS & PRÉSENTATION */}

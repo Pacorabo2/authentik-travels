@@ -23,9 +23,9 @@ export default function TripItinerary({ program }: { program: any }) {
       </h2>
 
       <div className="space-y-3">
-        {itinerary.map((step) => (
+        {itinerary.map((step, i) => (
           <div
-            key={step.day}
+            key={`step-${step.day}-${i}`}
             className="border border-slate-100 rounded-[1.5rem] overflow-hidden bg-white shadow-sm transition-all"
           >
             {/* EN-TÊTE DE L'ACCORDÉON */}

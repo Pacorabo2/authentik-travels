@@ -21,13 +21,14 @@ export default async function CircuitDetailPage({
   return (
     <main className="bg-white">
       {/* SECTION A : HERO - VISUEL DU CIRCUIT */}
-      <section className="relative h-[70vh] w-full flex items-center justify-center bg-slate-900">
+      <section className="relative h-[100vh] -mt-[80px] w-full flex items-center justify-center bg-slate-900">
         <Image
           src={circuit.presentationImg || "/default-circuit.jpg"}
           fill
           className="object-cover opacity-60"
           alt={circuit.title}
         />
+        <div className="absolute z-10 w-full h-full bg-black/45"></div>
         <div className="relative z-10 text-center px-4">
           <span className="text-amber-500 font-black uppercase tracking-[0.4em] text-sm mb-4 block">
             Circuit Classique • {circuit.destination.name}
@@ -36,6 +37,7 @@ export default async function CircuitDetailPage({
             {circuit.title}
           </h1>
         </div>
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
       </section>
 
       {/* SECTION B : PRÉSENTATION & TARIFS (Version Classique) */}

@@ -11,7 +11,7 @@ export default async function DestinationsPage() {
   return (
     <main className="bg-white min-h-screen">
       {/* SECTION A : HERO (Inchangé pour la cohérence) */}
-      <section className="relative h-[90vh] -mt-[80px] w-full flex items-center justify-center bg-slate-900 overflow-hidden">
+      <section className="relative h-[100vh] -mt-[80px] w-full flex items-center justify-center bg-slate-900 overflow-hidden">
         <Image
           src="https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/_DSC9533.JPG"
           fill
@@ -20,7 +20,8 @@ export default async function DestinationsPage() {
           className="object-cover opacity-60"
           alt="Destinations Authentik"
         />
-        <div className="relative z-10 text-center px-4">
+        <div className="absolute z-10 w-full h-full bg-black/45"></div>
+        <div className="relative z-11 text-center px-4">
           <span className="text-amber-500 font-black uppercase tracking-[0.2em] text-base mb-4 block animate-fade-in">
             Explorez
           </span>

@@ -9,7 +9,7 @@ export default function HeroSection() {
 
   return (
     // 'relative h-screen' = prend toute la hauteur de l'écran et sert de repère pour les éléments absolus
-    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+    <section className="relative h-screen -mt-[80px] w-full flex items-center justify-center overflow-hidden">
       {/* 1. LA VIDÉO EN ARRIÈRE-PLAN */}
       <div className="absolute inset-0 pointer-events-none">
         <iframe
@@ -21,7 +21,7 @@ export default function HeroSection() {
 
       {/* 2. L'OVERLAY SOMBRE (Filtre de lisibilité) */}
       {/* 'z-10' le place au-dessus de la vidéo (z-0) mais en dessous du texte (z-20) */}
-      <div className="absolute z-10 w-full h-full bg-black/55"></div>
+      <div className="absolute z-10 w-full h-full bg-black/45"></div>
 
       {/* 3. LE CONTENU (Texte et Boutons) */}
       <div className="relative z-20 text-center text-white px-4 flex flex-col items-center">
@@ -56,6 +56,7 @@ export default function HeroSection() {
           </Link>
         </div>
       </div>
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
     </section>
   );
 }

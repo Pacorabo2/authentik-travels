@@ -37,7 +37,7 @@ export default async function DestinationPage({
   return (
     <main>
       {/* SECTION A : HERO - L'ÉMOTION (Le Pays) */}
-      <section className="relative h-[80vh] -mt-[80px] w-full flex items-center justify-center bg-slate-900">
+      <section className="relative h-[100vh] -mt-[80px] w-full flex items-center justify-center bg-slate-900 overflow-hidden">
         {videoSrc ? (
           <div className="absolute inset-0 pointer-events-none">
             <iframe
@@ -54,6 +54,8 @@ export default async function DestinationPage({
             alt={destination.name}
           />
         )}
+        <div className="absolute z-10 w-full h-full bg-black/45"></div>
+        
         <div className="relative z-10 text-center px-4">
           <span className="text-amber-500 font-black uppercase tracking-[0.2em] text-base mb-4 block animate-fade-in">
             Découvrez l&apos;Authentique
@@ -63,6 +65,7 @@ export default async function DestinationPage({
             <span className="text-amber-500 text-7xl md:text-9xl">.</span>
           </h1>
         </div>
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
       </section>
 
       {/* SECTION B : PRÉSENTATION - L'EXPERTISE PAYS */}
