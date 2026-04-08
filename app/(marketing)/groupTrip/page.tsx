@@ -10,6 +10,8 @@ export default async function GroupTripsPage() {
     orderBy: { startDate: "asc" },
   });
 
+  console.log("groupTrips", groupTrips);
+
   // Fonction utilitaire pour dynamiser la couleur des pastilles par pays
   const getCountryColor = (countryName: string) => {
     const colors: { [key: string]: string } = {
@@ -70,11 +72,12 @@ export default async function GroupTripsPage() {
               {/* IMAGE DE LA CARTE */}
               <div className="relative h-72 w-full overflow-hidden">
                 <Image
-                  src={trip.destination.imageUrl || "/placeholder.jpg"}
+                  src={trip.imageUrl || "/placeholder.jpg"}
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover group-hover:scale-105 transition-transform duration-1000"
                   alt={trip.title}
+                  loading="eager"
                 />
                 {/* PASTILLE PAYS DYNAMIQUE */}
                 <div className="absolute top-8 left-8">
