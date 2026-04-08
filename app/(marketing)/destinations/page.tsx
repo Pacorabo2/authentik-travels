@@ -41,7 +41,7 @@ export default async function DestinationsPage() {
           <div className="space-y-48">
             {" "}
             {/* Espacement massif entre les pays pour l'élégance */}
-            {destinations.map((dest, index) => (
+            {destinations.map((dest) => (
               <div
                 key={dest.id}
                 className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start group"

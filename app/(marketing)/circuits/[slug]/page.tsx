@@ -85,7 +85,7 @@ export default async function CircuitDetailPage({
                 href={`/sur-mesure?base=${circuit.slug}`}
                 className="block w-full text-center bg-slate-900 text-white py-6 rounded-2xl font-black uppercase tracking-widest hover:bg-amber-500 transition-all shadow-xl shadow-slate-200"
               >
-                Personnaliser ce voyage
+                Ce circuit m&apos;intéresse
               </Link>
               <p className="text-[10px] text-center text-slate-400 uppercase font-bold tracking-widest">
                 Devis gratuit sous 48h
