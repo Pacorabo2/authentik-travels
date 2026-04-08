@@ -10,7 +10,7 @@ export default function SurMesurePage() {
           Notre Expertise Historique
         </span>
         <h1 className="text-6xl md:text-8xl font-bold mb-6 tracking-medium text-balance">
-          Votre aventure, <br /> sur mesure<span className="text-amber-500 ">.</span>
+          Votre aventure <br /> sur mesure<span className="text-amber-500 ">.</span>
         </h1>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto text-balance">
           Loin des circuits touristiques classiques, nous créons avec vous un
