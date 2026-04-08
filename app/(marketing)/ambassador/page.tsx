@@ -40,12 +40,12 @@ export default function AmbassadorPage() {
           <span className="text-amber-500 font-black uppercase tracking-[0.4em] text-sm mb-6 block">
             Programme Ambassadeur
           </span>
-          <h1 className="text-6xl md:text-[8rem] font-bold text-white tracking-medium mb-8">
+          <h1 className="text-6xl md:text-8xl font-bold mb-6 text-white tracking-medium text-balance">
             Devenez ambassadeur <span className="text-amber-500">.</span>
           </h1>
           <p className="text-white text-xl md:text-2xl font-medium max-w-2xl mx-auto italic opacity-90">
             "Proposez un voyage hos du commun à votre groupe sans vous soucier
-            de l&apos;organisation ni de la logistique."
+            de l&apos;organisation."
           </p>
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
