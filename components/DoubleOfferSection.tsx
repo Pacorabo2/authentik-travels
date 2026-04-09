@@ -7,7 +7,7 @@ export default function DoubleOfferSection() {
       <div className="max-w-7xl mx-auto">
         {/* En-tête de la section */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-6xl font-bold text-gray-900 mb-4">
             Deux façons de vivre l&apos;Authentik
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -35,15 +35,15 @@ export default function DoubleOfferSection() {
             />
 
             {/* Filtre assombrissant (Gradient) pour lire le texte */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent" />
 
             {/* Contenu de la carte */}
-            <div className="relative z-10 p-8 text-white w-full">
-              <span className="uppercase tracking-widest text-sm font-semibold text-amber-500 mb-2 block">
+            <div className="relative z-10 p-9 text-white w-full">
+              <span className="uppercase tracking-widest text-3sm font-semibold text-amber-500 mb-2 block">
                 Immersion & Danse
               </span>
-              <h3 className="text-3xl font-bold mb-3">Voyages de Groupe</h3>
-              <p className="text-gray-200 mb-6">
+              <h3 className="text-5xl font-bold mb-3">Voyages de Groupe</h3>
+              <p className=" text-xl mb-6">
                 Rejoignez d&apos;autres passionnés. <br />
                 Une immersion guidée par nos ambassadeurs où la danse,
                 l&apos;art et les rencontres locales deviennent votre quotidien.{" "}
@@ -70,18 +70,18 @@ export default function DoubleOfferSection() {
               }}
             />
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent" />
 
-            <div className="relative z-10 p-8 text-white w-full">
+            <div className="relative z-10 p-9 text-white w-full">
               <span className="uppercase tracking-widest text-sm font-semibold text-amber-500 mb-2 block">
                 100% Personnalisé
               </span>
-              <h3 className="text-3xl font-bold mb-3">Voyages Sur-Mesure</h3>
-              <p className="text-gray-200 mb-6">
-                L’expertise de nos racines. <br />
+              <h3 className="text-5xl font-bold mb-3">Voyages Sur-Mesure</h3>
+              <p className="text-xl mb-6">
+                L&apos;expertise de nos racines. <br />
                 Confiez-nous vos envies et vos dates : <br />
                 nous dessinons un itinéraire hors-piste, taillé sur mesure pour
-                votre curiosité.
+                votre curiosité. <br />
               </p>
               <span className="inline-block bg-white text-black font-semibold py-3 px-6 rounded-full transition-colors group-hover:bg-amber-500 group-hover:text-white">
                 Tracer mon itinéraire
