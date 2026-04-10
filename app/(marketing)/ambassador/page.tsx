@@ -139,6 +139,66 @@ export default function AmbassadorPage() {
         </div>
       </section>
 
+      {/* SECTION : PREUVE SOCIALE LIVE */}
+      <section className="py-24 bg-slate-50">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <span className="text-amber-500 font-black uppercase tracking-widest text-xs">
+              La voix des experts
+            </span>
+            <h2 className="text-4xl md:text-5xl font-black italic uppercase tracking-tighter text-slate-900 mt-4">
+              Ils ont franchi <span className="text-amber-500">le pas</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {[
+              {
+                name: "Marco",
+                role: "Professeur de Salsa",
+                text: "J'appréhendais la logistique pour mes 12 élèves. Authentik a tout géré, j'ai pu me concentrer sur la danse.",
+                img: "https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/Marco_Salsa.jpg",
+              },
+              {
+                name: "Elena",
+                role: "Influenceuse Voyage",
+                text: "Le concept d'immersion brute a conquis ma communauté. Un voyage complet en moins de 48h !",
+                img: "https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/Elena_Voyage.jpg",
+              },
+              {
+                name: "Thomas",
+                role: "Coach Bien-être",
+                text: "La Colombie avec Authentik a été une révélation. La sécurité est impeccable, l'immersion est totale.",
+                img: "https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/Thomas_Coach.jpg",
+              },
+            ].map((testimo, i) => (
+              <div
+                key={i}
+                className="bg-white p-8 rounded-[3rem] shadow-xl border border-slate-100 flex flex-col items-center text-center group hover:-translate-y-2 transition-transform duration-500"
+              >
+                <div className="relative w-24 h-24 mb-6 rounded-full overflow-hidden ring-4 ring-amber-500 ring-offset-4">
+                  <Image
+                    src={testimo.img}
+                    fill
+                    className="object-cover"
+                    alt={testimo.name}
+                  />
+                </div>
+                <p className="text-slate-600 italic mb-6 leading-relaxed">
+                  "{testimo.text}"
+                </p>
+                <h4 className="font-black uppercase italic text-slate-900 tracking-tighter">
+                  {testimo.name}
+                </h4>
+                <span className="text-[10px] font-bold text-amber-500 uppercase tracking-widest">
+                  {testimo.role}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* SECTION 4 : CTA FINAL OPTIMISÉ */}
       <section className="py-32 text-center px-6">
         <div className="max-w-4xl mx-auto bg-slate-900 p-16 rounded-[4rem] shadow-2xl relative overflow-hidden">
@@ -187,6 +247,53 @@ export default function AmbassadorPage() {
           <p className="mt-8 text-slate-500 text-xs uppercase tracking-widest font-bold">
             — Réponse garantie sous 24h —
           </p>
+        </div>
+      </section>
+
+      {/* SECTION : LEAD MAGNET - LE GUIDE PDF */}
+      <section className="py-24 px-6">
+        <div className="max-w-5xl mx-auto bg-slate-900 rounded-[4rem] overflow-hidden flex flex-col md:flex-row shadow-2xl">
+          {/* Visuel du Guide */}
+          <div className="w-full md:w-1/2 relative h-80 md:h-auto bg-amber-500 flex items-center justify-center p-12">
+            <div className="relative w-full h-full shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-700">
+              <Image
+                src="https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/guide_cover.jpg"
+                fill
+                className="object-cover rounded-lg"
+                alt="Guide Ambassadeur Authentik Travels"
+              />
+            </div>
+          </div>
+
+          {/* Texte et Formulaire */}
+          <div className="w-full md:w-1/2 p-12 md:p-16 flex flex-col justify-center">
+            <span className="text-amber-500 font-black uppercase tracking-widest text-[10px] mb-4">
+              Ressource Gratuite
+            </span>
+            <h3 className="text-3xl md:text-4xl font-black italic uppercase text-white leading-none mb-6">
+              Le Guide <span className="text-amber-500">Complet </span> de
+              l&apos;Ambassadeur
+            </h3>
+            <p className="text-slate-400 mb-8 font-medium">
+              Apprenez à fédérer votre tribu, choisir la bonne période et
+              rentabiliser votre projet de voyage en 10 étapes clés.
+            </p>
+
+            {/* Formulaire simple (Tu pourras le lier à Resend ou Mailchimp) */}
+            <form className="space-y-4">
+              <input
+                type="email"
+                placeholder="Votre adresse email"
+                className="w-full p-5 bg-white/10 border border-white/20 rounded-2xl text-white placeholder:text-slate-500 focus:ring-2 focus:ring-amber-500 transition-all outline-none"
+              />
+              <button className="w-full bg-amber-500 text-slate-900 font-black uppercase py-5 rounded-2xl hover:bg-white transition-colors text-xs tracking-widest">
+                Recevoir le guide PDF
+              </button>
+            </form>
+            <p className="mt-4 text-[9px] text-slate-500 uppercase tracking-widest text-center">
+              🔒 Vos données restent privées. Pas de spam.
+            </p>
+          </div>
         </div>
       </section>
     </main>
