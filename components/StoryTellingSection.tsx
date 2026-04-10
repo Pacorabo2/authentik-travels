@@ -34,8 +34,8 @@ export default function StorytellingSection() {
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
             Plus qu&apos;un voyage, <br /> une rencontre{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-400">
-              authentique.
-            </span>
+              authentique
+            </span>.
           </h2>
 
           {/* Paragraphes de texte */}
