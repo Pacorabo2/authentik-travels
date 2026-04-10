@@ -86,9 +86,9 @@ export default async function GroupTripDetailPage({
               >
                 {isFull ? "Voyage Complet" : "Réserver ma place"}
               </Link>
-              <p className="text-[10px] text-center text-slate-400 uppercase font-black tracking-widest">
+              <p className="text-[10px] text-center text-4xl uppercase font-black text-slate-900 tracking-widest">
                 Acompte de{" "}
-                {trip.depositAmount || (trip.priceBase * 0.3).toFixed(0)}€ à la
+                {trip.depositAmount || (trip.priceBase * 0.3).toFixed(0)} € à la
                 réservation
               </p>
             </div>
