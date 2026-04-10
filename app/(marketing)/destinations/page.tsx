@@ -81,7 +81,7 @@ export default async function DestinationsPage() {
                       href={`/destinations/${dest.slug}`}
                       className="inline-flex items-center gap-6 bg-slate-900 text-white px-12 py-6 rounded-2xl font-black uppercase text-xs tracking-[0.2em] hover:bg-amber-500 transition-all duration-300 shadow-xl shadow-slate-200 group/btn"
                     >
-                      Explorer {dest.name}
+                      Explorer
                       <span className="group-hover/btn:translate-x-2 transition-transform">
                         →
                       </span>
