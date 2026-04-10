@@ -25,8 +25,9 @@ export default async function GroupTripDetailPage({
       {/* HERO SECTION */}
       <section className="relative h-[100vh] -mt-[80px] bg-slate-900 flex items-center justify-center">
         <Image
-          src={trip.destination.imageUrl || "/default.jpg"}
+          src={trip.imageUrl || "/default.jpg"}
           fill
+          priority
           className="object-cover opacity-50"
           alt={trip.title}
         />
