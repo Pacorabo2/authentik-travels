@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { renderDescription } from "@/lib/text-utils";
-import { CheckCircle2, Users, Plane, Star } from "lucide-react";
+import { Users, Plane, Star } from "lucide-react";
 import { getEmbedVideoUrl } from "@/lib/video-utils";
+import LeadMagnetForm from "./LeadMagnetForm";
 
 export default function AmbassadorPage() {
   const introText =
@@ -54,15 +55,20 @@ export default function AmbassadorPage() {
       {/* SECTION 2 : L'ARGUMENTAIRE (STICKY DESIGN) */}
       <section className="py-32 container mx-auto px-6 max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
-          <div className="lg:sticky lg:top-32 relative h-[60vh] rounded-[3.5rem] overflow-hidden shadow-2xl">
-            <Image
-              src="https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/AUTENTIK%20(92%20de%20143).jpg"
-              fill
-              className="object-cover"
-              alt="Groupe de danse Authentik"
-            />
+          {/* COLONNE GAUCHE : On garde le sticky sur le conteneur extérieur */}
+          <div className="lg:sticky lg:top-32">
+            <div className="relative h-[60vh] rounded-[3.5rem] overflow-hidden shadow-2xl">
+              <Image
+                src="https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/AUTENTIK%20(92%20de%20143).jpg"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
+                alt="Groupe de danse Authentik"
+              />
+            </div>
           </div>
 
+          {/* COLONNE DROITE : Texte */}
           <div>
             <div className="mb-12">
               <h2 className="text-5xl font-black text-slate-900 italic uppercase tracking-tighter mb-8">
@@ -157,19 +163,19 @@ export default function AmbassadorPage() {
                 name: "Marco",
                 role: "Professeur de Salsa",
                 text: "J'appréhendais la logistique pour mes 12 élèves. Authentik a tout géré, j'ai pu me concentrer sur la danse.",
-                img: "https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/Marco_Salsa.jpg",
+                img: "https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/lachi.jpg",
               },
               {
                 name: "Elena",
                 role: "Influenceuse Voyage",
                 text: "Le concept d'immersion brute a conquis ma communauté. Un voyage complet en moins de 48h !",
-                img: "https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/Elena_Voyage.jpg",
+                img: "https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/lachi.jpg",
               },
               {
                 name: "Thomas",
                 role: "Coach Bien-être",
                 text: "La Colombie avec Authentik a été une révélation. La sécurité est impeccable, l'immersion est totale.",
-                img: "https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/Thomas_Coach.jpg",
+                img: "https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/lachi.jpg",
               },
             ].map((testimo, i) => (
               <div
@@ -180,6 +186,7 @@ export default function AmbassadorPage() {
                   <Image
                     src={testimo.img}
                     fill
+                    sizes="15vw"
                     className="object-cover"
                     alt={testimo.name}
                   />
@@ -257,10 +264,12 @@ export default function AmbassadorPage() {
           <div className="w-full md:w-1/2 relative h-80 md:h-auto bg-amber-500 flex items-center justify-center p-12">
             <div className="relative w-full h-full shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-700">
               <Image
-                src="https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/guide_cover.jpg"
+                src="https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/flyer2his.png"
                 fill
+                sizes="(max-width: 768px) 100vw, 33vw" // Ajout du sizes pour la perf
                 className="object-cover rounded-lg"
                 alt="Guide Ambassadeur Authentik Travels"
+                priority
               />
             </div>
           </div>
@@ -279,17 +288,9 @@ export default function AmbassadorPage() {
               rentabiliser votre projet de voyage en 10 étapes clés.
             </p>
 
-            {/* Formulaire simple (Tu pourras le lier à Resend ou Mailchimp) */}
-            <form className="space-y-4">
-              <input
-                type="email"
-                placeholder="Votre adresse email"
-                className="w-full p-5 bg-white/10 border border-white/20 rounded-2xl text-white placeholder:text-slate-500 focus:ring-2 focus:ring-amber-500 transition-all outline-none"
-              />
-              <button className="w-full bg-amber-500 text-slate-900 font-black uppercase py-5 rounded-2xl hover:bg-white transition-colors text-xs tracking-widest">
-                Recevoir le guide PDF
-              </button>
-            </form>
+            {/* APPEL DU COMPOSANT CLIENT */}
+            <LeadMagnetForm />
+
             <p className="mt-4 text-[9px] text-slate-500 uppercase tracking-widest text-center">
               🔒 Vos données restent privées. Pas de spam.
             </p>
