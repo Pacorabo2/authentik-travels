@@ -28,6 +28,7 @@ export default function AmbassadorPage() {
           <Image
             src="https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/trips/_DSC3127.JPG"
             fill
+            priority
             className="object-cover opacity-50"
             alt=""
           />
@@ -225,7 +226,7 @@ export default function AmbassadorPage() {
           <div className="flex flex-col md:flex-row gap-6 justify-center relative z-10">
             {/* BOUTON PRINCIPAL : CALENDRIER */}
             <Link
-              href="https://calendly.com/authentika-info"
+              href="/ambassador/apply"
               target="_blank"
               className="bg-amber-500 text-slate-900 px-10 py-6 rounded-2xl font-black uppercase text-xs tracking-[0.2em] hover:bg-white transition-all duration-300 shadow-xl shadow-amber-500/20"
             >
