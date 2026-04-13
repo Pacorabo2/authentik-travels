@@ -46,3 +46,49 @@ export const sendGuideEmail = async (email: string) => {
     `,
   });
 };
+
+
+export const sendApplicationEmail = async (data: {
+  profile: string;
+  audience: string;
+  destination: string;
+  timing?: string;
+  whatsapp: string;
+}) => {
+  return await resend.emails.send({
+    from: "Authentik Travels <onboarding@resend.dev>", // À remplacer par info@authentika.io après validation
+    to: "info@authentika.io",
+    subject: `🚀 Nouvelle Candidature Ambassadeur : ${data.profile}`,
+    html: `
+      <div style="font-family: sans-serif; color: #333; border: 1px solid #eee; padding: 20px; border-radius: 15px;">
+        <h2 style="color: #f59e0b; text-transform: uppercase;">Nouvelle Candidature reçue !</h2>
+        <p>Un futur ambassadeur vient de remplir le formulaire de qualification :</p>
+        
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Profil :</strong></td>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;">${data.profile}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Tribu estimée :</strong></td>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;">${data.audience}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Destination :</strong></td>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;">${data.destination}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>WhatsApp :</strong></td>
+            <td style="padding: 10px; border-bottom: 1px solid #eee;">
+              <a href="https://wa.me/${data.whatsapp.replace(/\s+/g, '')}">${data.whatsapp}</a>
+            </td>
+          </tr>
+        </table>
+
+        <p style="margin-top: 20px; font-size: 12px; color: #999;">
+          L'utilisateur a été redirigé vers Calendly après avoir validé ces infos.
+        </p>
+      </div>
+    `,
+  });
+};

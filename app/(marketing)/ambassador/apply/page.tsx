@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { handleAmbassadorApply } from "@/app/actions/apply-ambassador";
 import toast from "react-hot-toast";
 
 export default function AmbassadorApplyPage() {
@@ -33,12 +34,33 @@ export default function AmbassadorApplyPage() {
     if (!formData.whatsapp)
       return toast.error("Votre numéro WhatsApp est requis");
 
-    toast.success("Analyse de votre profil en cours...");
+    const loadingToast = toast.loading("Analyse de votre profil...");
 
-    // Simulation : redirection vers Calendly après 1.5s
-    setTimeout(() => {
+    try {
+      // 1. Envoi des données au serveur (et donc à ton mail)
+      const result = await handleAmbassadorApply(formData);
+
+      if (result.success) {
+        toast.success("Profil validé ! Redirection vers l'agenda...", {
+          id: loadingToast,
+        });
+
+        // 2. Redirection vers Calendly
+        setTimeout(() => {
+          router.push("https://calendly.com/authentika-info");
+        }, 1500);
+      } else {
+        toast.error(
+          "Une erreur est survenue, mais vous pouvez quand même prendre RDV.",
+          { id: loadingToast },
+        );
+        // On redirige quand même pour ne pas perdre le client
+        router.push("https://calendly.com/authentika-info");
+      }
+    } catch (err) {
+      toast.dismiss(loadingToast);
       router.push("https://calendly.com/authentika-info");
-    }, 1500);
+    }
   };
 
   return (
