@@ -10,8 +10,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Authentik Travels | Immersion & Aventure",
-  description: "Voyages authentiques et séjours chez l'habitant.",
+  title: "Authentik Travels | Immersions Brutes, Danse & Avantures",
+  description:
+    "Vivez des expériences uniques en Colombie et ailleurs. Voyages authentiques et séjours chez l'habitant organisés pour les passionnés de danse et de culture.",
 };
 
 export default async function RootLayout({
