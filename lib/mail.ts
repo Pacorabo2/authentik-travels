@@ -27,7 +27,7 @@ export const sendConfirmationEmail = async (
 
 export const sendGuideEmail = async (email: string) => {
   const GUIDE_URL =
-    "https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/Authentik%20Travels%20Marketing/Guide-des-tailles-STIHL.pdf";
+    "https://twszcusnnpsazakoxuxn.supabase.co/storage/v1/object/public/Authentik%20Travels%20Marketing/Programme%20ambassador.pdf";
   return await resend.emails.send({
     from: "Authentik Travels <onboarding@resend.dev>", // Plus tard, tu mettras ton propre domaine
     to: [email, "info@authentika.io"], // Envoi au client ET à toi
@@ -46,7 +46,6 @@ export const sendGuideEmail = async (email: string) => {
     `,
   });
 };
-
 
 export const sendApplicationEmail = async (data: {
   profile: string;
@@ -80,7 +79,7 @@ export const sendApplicationEmail = async (data: {
           <tr>
             <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>WhatsApp :</strong></td>
             <td style="padding: 10px; border-bottom: 1px solid #eee;">
-              <a href="https://wa.me/${data.whatsapp.replace(/\s+/g, '')}">${data.whatsapp}</a>
+              <a href="https://wa.me/${data.whatsapp.replace(/\s+/g, "")}">${data.whatsapp}</a>
             </td>
           </tr>
         </table>
