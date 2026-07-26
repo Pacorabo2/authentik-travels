@@ -25,6 +25,13 @@ export async function POST(req: Request) {
       );
     }
 
+    if (!trip.depositAmount) {
+      return NextResponse.json(
+        { error: "Aucun acompte défini pour ce voyage" },
+        { status: 400 },
+      );
+    }
+
     // 2. LOGIQUE DU NOMBRE DE PARTICIPANTS
     let quantity = parseInt(participants) || 1;
     if (quantity > 2) quantity = 2;
