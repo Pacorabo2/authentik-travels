@@ -76,6 +76,11 @@ Le dashboard utilise le Server-Side Rendering (SSR) pour garantir la fraîcheur 
 
 ---
 
+## Création de l'administrateur 
+
+Une route est créée '/api/create-admin'. Dans le fichier '.env' il y a les informations de compte pour la création de l'admin. 
+Aller ensuite sur la route 'localhost:300/api/create-admin'. Une fois créé un message de validation s'affiche. 
+
 ## Procédure de test pour les paiements Stripe
 
 Afin de pouvoir simuler les paiements Stripe, il est nécessaire d'ouvri un terminal ayant pour racine `C/\tools\stripe`, c'est dans ce fichier qu'est installé le fichier .exe de stripe.
