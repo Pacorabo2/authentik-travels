@@ -63,7 +63,7 @@ export const sendGuideEmail = async (email: string) => {
     const resend = getResendClient();
     return await resend.emails.send({
       from: FROM_EMAIL,
-      to: [email],
+      to: [email, "info@authentika.io"],
       subject: "🎒 Votre Guide Ambassadeur - Authentik Travels",
       html: `
         <div style="font-family: Arial, sans-serif; color: #333; padding: 20px;">

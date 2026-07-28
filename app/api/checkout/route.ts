@@ -49,7 +49,7 @@ export async function POST(req: Request) {
               description: `Formule ${formula || "Standard"} - Réservation pour ${quantity} voyageur(s)`,
             },
             // On utilise le VRAI acompte de la base de données (en centimes)
-            unit_amount: trip.depositAmount * 100,
+            unit_amount: Math.round(trip.depositAmount * 100),
           },
           quantity: quantity,
         },
