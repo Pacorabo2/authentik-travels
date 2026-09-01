@@ -1,7 +1,9 @@
 // prisma/schema.prisma
+// Authentik Travels — schéma complet et final
+// Existant (site) + Module Coûts + Module Ambassadeur + Module Prestataire
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
@@ -9,126 +11,16 @@ datasource db {
   provider = "postgresql"
 }
 
-// ------------------------------------------------------
-// 1. DESTINATIONS & PAGES PAYS (NOUVEAU)
-// ------------------------------------------------------
-model Destination {
-  id            String      @id @default(cuid())
-  name          String      @unique
-  slug          String      @unique
-  tagline       String?     // "La perle des Caraïbes"
-  description   String      @db.Text
-  heroVideoUrl  String?
-  imageUrl      String?
-  currency1     String?     
-  currency2     String? 
+// ========================================================
+// ENUMS
+// ========================================================
 
-  // Relations  
-  trips         GroupTrip[] // Relation avec les voyages de groupe (Niche)
-  circuits      Circuit[]   // Relation avec les circuits classiques
-  posts        Post[]      // Relation avec les articles de blog
-
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-}
-
-// ------------------------------------------------------
-// 2. VOYAGES INDIVIDUELS / CIRCUITS TYPES (Classique / Famille / StandardAU)
-// ------------------------------------------------------
-model Circuit {
-  id              String      @id @default(cuid())
-  title           String
-  slug            String      @unique
-  tagline         String?     // "Le Costa Rica en famille"
-  description     String      @db.Text
-  presentationImg String?
-  duration        Int         
-  priceBase       Float       
-  pricePremium    Float?      
-  pricePlatinium  Float?      
-  program         Json        
-  isPublished     Boolean     @default(false)
-
-  // Relation Destination
-  destinationId   String
-  destination     Destination @relation(fields: [destinationId], references: [id])
-
-  // Relation booking
-  bookings        Booking[]
-  
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
-}
-
-// ------------------------------------------------------
-// 3. VOYAGES DE GROUPE (Modifié pour la relation)
-// ------------------------------------------------------
-model GroupTrip {
-  id              String      @id @default(cuid())
-  title           String
-  slug            String      @unique
-  description     String      @db.Text
-  imageUrl     String?    // Image de la carte ou miniature
-  videoUrl     String?    // URL de la vidéo Hero (YouTube/Vimeo ou MP4)
-  startDate       DateTime
-  endDate         DateTime
-  duration        Int
-  capacity        Int
-  program         Json        // Itinéraire détaillé
-  priceBase       Float
-  pricePremium    Float?
-  pricePlatinium  Float?
-  depositAmount   Float?
-  status          TripStatus  @default(DRAFT)
-
-  // Relation Destination
-  destinationId   String
-  destination     Destination @relation(fields: [destinationId], references: [id])
-  
-  bookings        Booking[]
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
-}
-
-// ------------------------------------------------------
-// 4. BLOG (Nouveau - Structure SEO & Performance)
-// ------------------------------------------------------
-model Post {
-  id              String      @id @default(cuid())
-  title           String
-  slug            String      @unique
-  excerpt         String?     @db.Text // Pour les meta-tags et cartes de liste
-  content         String      @db.Text // Contenu riche (HTML/Markdown)
-  mainImage       String      // Image Hero de l'article
-  category        String      // Ex: "Conseils", "Récits", "Guide"
-  readingTime     Int?        // Temps estimé en minutes
-  
-  // SEO & Social
-  metaTitle       String?
-  metaDescription String?
-  featured        Boolean     @default(false) // Pour mise en avant sur Home/Blog
-  published       Boolean     @default(false)
-
-  // Relation Destination (Optionnel : lier un article à un pays)
-  destinationId   String?
-  destination     Destination? @relation(fields: [destinationId], references: [id])
-
-  authorName      String      @default("L'équipe Authentik")
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
-
-  @@index([slug])
-}
-
-// ------------------------------------------------------
-// 5. ENUMS & AUTH
-// ------------------------------------------------------
 enum TripStatus {
-  DRAFT      // En préparation (non visible sur le site)
-  PUBLISHED  // En ligne et disponible
-  FULL       // COMPLET (Visible mais plus de réservations possibles)
-  CANCELLED  // Annulé
-  COMPLETED  // Terminé (Passé)
+  DRAFT
+  PUBLISHED
+  FULL
+  CANCELLED
+  COMPLETED
 }
 
 enum LeadStatus {
@@ -139,34 +31,15 @@ enum LeadStatus {
   LOST
 }
 
-// ------------------------------------------------------
-// 6. UTILISATEURS & AUTH (NexAuth standard)
-// ------------------------------------------------------
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  password      String?
-  image         String?
-  role          String    @default("USER")
-  
-  // Relations
-  accounts      Account[]
-  sessions      Session[]
-  bookings      Booking[] 
-
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now()) @updatedAt
+enum UserRole {
+  ADMIN
+  USER
 }
 
-// ------------------------------------------------------
-// 7. RÉSERVATIONS, LEADS & AUTH (Le reste de ton schéma)
-// ------------------------------------------------------
-
 enum BookingType {
-  GROUP      // Voyage à date fixe (ton focus actuel)
-  INDIVIDUAL // Circuit catalogue acheté tel quel
-  CUSTOM     // Circuit sur-mesure validé après devis
+  GROUP
+  INDIVIDUAL
+  CUSTOM
 }
 
 enum BookingStatus {
@@ -176,66 +49,199 @@ enum BookingStatus {
   REFUNDED
 }
 
-model Booking {
-  id              Int           @id @default(autoincrement())
-  type            BookingType   @default(GROUP)
-  
-  // POLYMORPHISME : Liens vers les différents produits
-  groupTripId     String?       // Rempli si c'est un voyage de groupe
-  groupTrip       GroupTrip?    @relation(fields: [groupTripId], references: [id])
-  
-  circuitId       String?       // Rempli si c'est un circuit individuel
-  circuit         Circuit?      @relation(fields: [circuitId], references: [id])
-
-  // INFOS CLIENT (Prénom + Nom séparés comme demandé)
-  firstName       String
-  lastName        String
-  email           String
-  phone           String?
-
-  // DÉTAILS DU SÉJOUR
-  startDate       DateTime
-  endDate         DateTime
-  participants    Int           @default(1)
-  optionType      String        // "BASE", "PREMIUM", "PLATINIUM"
-  
-  // FINANCE
-  totalPrice      Float
-  amountPaid      Float         @default(0)
-  paymentMethod   String        // "STRIPE", "VIREMENT", "CHEQUE"
-  status          BookingStatus @default(PENDING)
-
-  // RELATION AUTH
-  userId          String?
-  user            User?         @relation(fields: [userId], references: [id])
-
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+enum OptionType {
+  BASE
+  PREMIUM
+  PLATINIUM
 }
 
-// ------------------------------------------------------
-// 8. RÉSERVATIONS, LEADS & AUTH (Le reste de ton schéma)
-// ------------------------------------------------------
-model CustomLead {
+enum PaymentMethod {
+  STRIPE
+  VIREMENT
+  CHEQUE
+}
+
+enum StatutDemarchage {
+  A_CONTACTER
+  CONTACTE
+  EN_DISCUSSION
+  PARTENAIRE
+  INACTIF
+  REFUS
+}
+
+enum TypeInteraction {
+  APPEL
+  EMAIL
+  MESSAGE_RESEAU
+  RDV
+  AUTRE
+}
+
+enum TypePrestataire {
+  HOTEL
+  TRANSPORT
+  ACTIVITE
+  AUTRE
+}
+
+enum TypeSuiviPrestataire {
+  NEGOCIATION_TARIF
+  NOUVELLE_PRESTATION
+  RENOUVELLEMENT
+  AUTRE
+}
+
+// ========================================================
+// 1. DESTINATIONS & PAGES PAYS
+// ========================================================
+model Destination {
   id              String      @id @default(cuid())
-  firstName       String
-  lastName        String
-  email           String
-  phone           String?
-  destination     String
-  budget          String
-  startDate       DateTime?
-  endDate         DateTime?
-  dayNumber       Int?
-  nightNumber     Int?
-  partySize       Int
-  experienceType  String
-  additionalNotes String?     @db.Text
-  status          LeadStatus  @default(NEW)
+  name            String      @unique
+  slug            String      @unique
+  tagline         String?
+  description     String      @db.Text
+  heroVideoUrl    String?
+  imageUrl        String?
+  primaryCurrency String?     // ex: "CUP" — ajustement acté (ex-currency1)
+  secondaryCurrency String?   // ex: "USD" — ajustement acté (ex-currency2)
+
+  // Relations — site existant
+  trips           GroupTrip[]
+  circuits        Circuit[]
+  posts           Post[]
+  customLeads     CustomLead[]  // ajustement acté : lien structuré destination sur CustomLead
+
+  // Relations — module Coûts
+  villes          Ville[]
+  hebergements    Hebergement[]
+  transports      Transport[]
+  activites       Activite[]
+
+  // Relation — module Prestataire
+  prestataires    Prestataire[]
+
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 }
 
+// ========================================================
+// 2. VOYAGES INDIVIDUELS / CIRCUITS TYPES
+// ========================================================
+model Circuit {
+  id              String      @id @default(cuid())
+  title           String
+  slug            String      @unique
+  tagline         String?
+  description     String      @db.Text
+  presentationImg String?
+  duration        Int
+  priceBase       Float
+  pricePremium    Float?
+  pricePlatinium  Float?
+  program         Json
+  isPublished     Boolean     @default(false)
+
+  destinationId   String
+  destination     Destination @relation(fields: [destinationId], references: [id])
+
+  bookings        Booking[]
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+// ========================================================
+// 3. VOYAGES DE GROUPE
+// ========================================================
+model GroupTrip {
+  id              String      @id @default(cuid())
+  title           String
+  slug            String      @unique
+  description     String      @db.Text
+  imageUrl        String?
+  videoUrl        String?
+  startDate       DateTime
+  endDate         DateTime
+  duration        Int
+  capacity        Int
+  program         Json
+  priceBase       Float
+  pricePremium    Float?
+  pricePlatinium  Float?
+  depositAmount   Float?
+  status          TripStatus  @default(DRAFT)
+
+  destinationId   String
+  destination     Destination @relation(fields: [destinationId], references: [id])
+
+  // Module Ambassadeur — lien vers la structure à l'origine du voyage
+  ambassadeurId   String?
+  ambassadeur     Ambassadeur? @relation(fields: [ambassadeurId], references: [id])
+
+  // Module Coûts — valeurs manuelles propres à chaque voyage
+  nombreChambres              Int?
+  volInterieurPrixParPersonne Float?
+  volInterieurTotal           Float?
+  coutMedias                  Float?
+  coutBancaires                Float?
+  tauxChange                  Float?   // 1 EUR = X (devise locale)
+  supplementChambreSimple     Float?
+  prixVenteParPersonne        Float?
+
+  etapes          EtapeVoyage[]
+  bookings        Booking[]
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+// ========================================================
+// 4. BLOG
+// ========================================================
+model Post {
+  id              String      @id @default(cuid())
+  title           String
+  slug            String      @unique
+  excerpt         String?     @db.Text
+  content         String      @db.Text
+  mainImage       String
+  category        String
+  readingTime     Int?
+
+  metaTitle       String?
+  metaDescription String?
+  featured        Boolean     @default(false)
+  published       Boolean     @default(false)
+
+  destinationId   String?
+  destination     Destination? @relation(fields: [destinationId], references: [id])
+
+  authorName      String      @default("L'équipe Authentik")
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([slug])
+}
+
+// ========================================================
+// 5. UTILISATEURS & AUTH (NextAuth standard)
+// ========================================================
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  password      String?
+  image         String?
+  role          UserRole  @default(USER)   // ajustement acté : texte libre → enum
+
+  accounts      Account[]
+  sessions      Session[]
+  bookings      Booking[]
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
+}
 
 model Account {
   id                 String  @id @default(cuid())
@@ -251,6 +257,7 @@ model Account {
   id_token           String? @db.Text
   session_state      String?
   user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([provider, providerAccountId])
 }
 
@@ -260,4 +267,259 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ========================================================
+// 6. RÉSERVATIONS & LEADS
+// ========================================================
+model Booking {
+  id              Int           @id @default(autoincrement())
+  type            BookingType   @default(GROUP)
+
+  // POLYMORPHISME : liens vers les différents produits
+  groupTripId     String?
+  groupTrip       GroupTrip?    @relation(fields: [groupTripId], references: [id])
+
+  circuitId       String?
+  circuit         Circuit?      @relation(fields: [circuitId], references: [id])
+
+  // ajustement acté : traçabilité du sur-mesure (type CUSTOM) vers le lead d'origine
+  customLeadId    String?
+  customLead      CustomLead?   @relation(fields: [customLeadId], references: [id])
+
+  // INFOS CLIENT
+  firstName       String
+  lastName        String
+  email           String
+  phone           String?
+
+  // DÉTAILS DU SÉJOUR
+  startDate       DateTime
+  endDate         DateTime
+  participants    Int           @default(1)
+  optionType      OptionType    @default(BASE)     // ajustement acté : texte libre → enum
+
+  // FINANCE
+  totalPrice      Float
+  amountPaid      Float         @default(0)
+  paymentMethod   PaymentMethod                     // ajustement acté : texte libre → enum
+  status          BookingStatus @default(PENDING)
+
+  // RELATION AUTH
+  userId          String?
+  user            User?         @relation(fields: [userId], references: [id])
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model CustomLead {
+  id              String      @id @default(cuid())
+  firstName       String
+  lastName        String
+  email           String
+  phone           String?
+
+  // ajustement acté : relation structurée + fallback texte libre
+  destinationId   String?
+  destination     Destination? @relation(fields: [destinationId], references: [id])
+  destinationLibre String?     // ex-"destination" : envie hors catalogue, texte libre
+
+  budget          String
+  startDate       DateTime?
+  endDate         DateTime?
+  dayNumber       Int?
+  nightNumber     Int?
+  partySize       Int
+  experienceType  String
+  additionalNotes String?     @db.Text
+  status          LeadStatus  @default(NEW)
+
+  bookings        Booking[]   // ajustement acté : traçabilité vers la réservation issue du devis
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+// ========================================================
+// 7. MODULE COÛTS
+// ========================================================
+model Ville {
+  id              String   @id @default(cuid())
+  nom             String
+  destinationId   String?
+  destination     Destination? @relation(fields: [destinationId], references: [id])
+
+  hebergements    Hebergement[]
+  transports      Transport[]
+  activites       Activite[]
+  etapes          EtapeVoyage[]
+  prestataires    Prestataire[]
+}
+
+model Hebergement {
+  id            String   @id @default(cuid())
+  villeId       String
+  ville         Ville    @relation(fields: [villeId], references: [id])
+  destinationId String?
+  destination   Destination? @relation(fields: [destinationId], references: [id])
+  nom           String
+  typeChambre   String
+  prixParNuit   Float
+  devise        String   @default("USD")
+
+  prestataireId String?
+  prestataire   Prestataire? @relation(fields: [prestataireId], references: [id])
+
+  etapes        EtapeVoyage[]
+}
+
+model Transport {
+  id            String   @id @default(cuid())
+  villeId       String
+  ville         Ville    @relation(fields: [villeId], references: [id])
+  destinationId String?
+  destination   Destination? @relation(fields: [destinationId], references: [id])
+  compagnie     String?  // champ texte libre, conservé en plus de la relation Prestataire
+  type          String   // ex: "bus", "bateau", "taxi", "navette"
+  description   String   // ex: "Aeropuerto - Hotel Europa"
+  prix          Float
+  devise        String   @default("USD")
+
+  prestataireId String?
+  prestataire   Prestataire? @relation(fields: [prestataireId], references: [id])
+
+  utilisations  EtapeTransport[]
+}
+
+model Activite {
+  id            String   @id @default(cuid())
+  villeId       String
+  ville         Ville    @relation(fields: [villeId], references: [id])
+  destinationId String?
+  destination   Destination? @relation(fields: [destinationId], references: [id])
+  nom           String
+  description   String?  // texte pour site web / supports commerciaux
+  prix          Float
+  devise        String   @default("USD")
+
+  prestataireId String?
+  prestataire   Prestataire? @relation(fields: [prestataireId], references: [id])
+
+  activite1     EtapeVoyage[] @relation("Activite1")
+  activite2     EtapeVoyage[] @relation("Activite2")
+}
+
+model EtapeVoyage {
+  id              String   @id @default(cuid())
+  groupTripId     String
+  groupTrip       GroupTrip @relation(fields: [groupTripId], references: [id])
+  jourNumero      Int
+  date            DateTime
+  villeId         String
+  ville           Ville    @relation(fields: [villeId], references: [id])
+
+  hebergementId   String?
+  hebergement     Hebergement? @relation(fields: [hebergementId], references: [id])
+
+  activite1Id     String?
+  activite1       Activite? @relation("Activite1", fields: [activite1Id], references: [id])
+  activite1Qte    Int?
+
+  activite2Id     String?
+  activite2       Activite? @relation("Activite2", fields: [activite2Id], references: [id])
+  activite2Qte    Int?
+
+  transports      EtapeTransport[]
+}
+
+model EtapeTransport {
+  id            String   @id @default(cuid())
+  etapeId       String
+  etape         EtapeVoyage @relation(fields: [etapeId], references: [id])
+  transportId   String
+  transport     Transport @relation(fields: [transportId], references: [id])
+  quantite      Int      @default(1)
+}
+
+// ========================================================
+// 8. MODULE AMBASSADEUR
+// ========================================================
+model Ambassadeur {
+  id                     String   @id @default(cuid())
+  nom                    String
+  disciplines            String[]
+  languesParlees         String[]
+  pays                   String?
+  ville                  String?
+  siteWeb                String?
+  email                  String?
+  telephone              String?
+  pageFacebook           String?
+  pageInstagram          String?
+  nbAdherentsEstime      Int?
+  nbFollowersFacebook    Int?
+  nbFollowersInstagram   Int?
+  festivalInfo           String?
+  statutDemarchage       StatutDemarchage @default(A_CONTACTER)
+  sourceScraping         String?
+  dateAjout              DateTime @default(now())
+  notes                  String?
+
+  contacts               ContactAmbassadeur[]
+  suivis                 SuiviAmbassadeur[]
+  groupTrips             GroupTrip[]
+}
+
+model ContactAmbassadeur {
+  id              String   @id @default(cuid())
+  ambassadeurId   String
+  ambassadeur     Ambassadeur @relation(fields: [ambassadeurId], references: [id])
+  nom             String?
+  role            String?
+  email           String?
+  telephone       String?
+}
+
+model SuiviAmbassadeur {
+  id              String   @id @default(cuid())
+  ambassadeurId   String
+  ambassadeur     Ambassadeur @relation(fields: [ambassadeurId], references: [id])
+  date            DateTime @default(now())
+  type            TypeInteraction
+  resume          String
+}
+
+// ========================================================
+// 9. MODULE PRESTATAIRE
+// ========================================================
+model Prestataire {
+  id              String   @id @default(cuid())
+  nom             String
+  type            TypePrestataire
+  languesParlees  String[]
+  villeId         String?
+  ville           Ville?   @relation(fields: [villeId], references: [id])
+  destinationId   String?
+  destination     Destination? @relation(fields: [destinationId], references: [id])
+  contactNom      String?
+  email           String?
+  telephone       String?
+  notes           String?
+
+  hebergements    Hebergement[]
+  transports      Transport[]
+  activites       Activite[]
+  suivis          SuiviPrestataire[]
+}
+
+model SuiviPrestataire {
+  id              String   @id @default(cuid())
+  prestataireId   String
+  prestataire     Prestataire @relation(fields: [prestataireId], references: [id])
+  date            DateTime @default(now())
+  type            TypeSuiviPrestataire
+  resume          String
+  ancienPrix      Float?
+  nouveauPrix     Float?
 }
